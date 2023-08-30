@@ -2,22 +2,25 @@
 version: '3.8'
 services:
 
-  postgres:
+  db:
+    container_name: postgres_container
     image: postgres:latest
     restart: always
     environment:
-      - POSTGRES_USER=user
-      - POSTGRES_PASSWORD=myrassword
+      POSTGRES_USER: user
+      POSTGRES_PASSWORD: password
+      POSTGRES_DB: test_db
     volumes:
-      - postgres:/var/lib/postgresql/data
+      - ./seeding.sql:/docker-entrypoint-initdb.d/seeding.sql 
     ports:
       - '5432:5432'
 
   pgadmin:
-    container_name: pgadmin
-    image: dpage/pgadmin4
+    container_name: pgadmin4_container 
+    image: dpage/pgadmin4:latest
+    restart: always
     environment:
-      PGADMIN_DEFAULT_EMAIL: pgadmin4@pgadmin.org
+      PGADMIN_DEFAULT_EMAIL: admin@admin.org
       PGADMIN_DEFAULT_PASSWORD: password 
       PGADMIN_LISTEN_PORT: 5050
       PGADMIN_CONFIG_SERVER_MODE: 'False'
@@ -25,11 +28,11 @@ services:
     ports:
       - 5050:5050
     depends_on:
-      - postgres 
-
-
-
-
+      - db 
+    links:
+      - "db:pgsql-server"
+    volumes:
+      - ./servers.json:/pgadmin4/servers.json
 
 volumes:
   postgres:
