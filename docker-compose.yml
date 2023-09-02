@@ -11,7 +11,7 @@ services:
       POSTGRES_PASSWORD: password
       POSTGRES_DB: test_db
     volumes:
-      - ./seeding.sql:/docker-entrypoint-initdb.d/seeding.sql 
+      - ./schema.sql:/docker-entrypoint-initdb.d/schema.sql
     ports:
       - '5432:5432'
 
@@ -30,7 +30,7 @@ services:
     depends_on:
       - db 
     links:
-      - "db:pgsql-server"
+      - "db:ser"
     volumes:
       - ./servers.json:/pgadmin4/servers.json
 
