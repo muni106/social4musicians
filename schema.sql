@@ -15,7 +15,6 @@ CREATE TABLE GENRE(
     genreName VARCHAR(16) UNIQUE NOT NULL,
     genreDescription VARCHAR(128) NOT NULL,
     origin VARCHAR(256) NOT NULL,
-    nickname VARCHAR(16), 
     PRIMARY KEY (genreName)
 );
 
