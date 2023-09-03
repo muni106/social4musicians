@@ -11,6 +11,7 @@ router.get('/', async (req: Request, res: Response) => {
 });
 
 router.post('/', async (req: Request, res: Response) => {
+    const {genrename, genredescription, origin} = req.body;
     const genre = await prisma.genre.create({
         data: {
             genrename: "Hip-hop",
