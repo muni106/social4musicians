@@ -113,8 +113,8 @@ model musician {
   locality         String             @db.VarChar(16)
   bestinstrument   String             @db.VarChar(16)
   telephonenumber  String             @unique @db.VarChar(16)
-  iscertified      String             @db.Bit(1)
-  ismaster         String             @db.Bit(1)
+  iscertified      Boolean
+  ismaster         Boolean
   chat_participant chat_participant[]
   follow           follow[]
   hashtag          hashtag[]
@@ -147,7 +147,7 @@ model post_reference {
 model reaction {
   nickname     String     @db.VarChar(16)
   discussionid Int
-  vote         String?    @db.Bit(1)
+  vote         Boolean?
   dateandtime  DateTime   @db.Timestamp(6)
   discussion   discussion @relation(fields: [discussionid], references: [discussionid], onDelete: Cascade, onUpdate: NoAction)
   musician     musician   @relation(fields: [nickname], references: [nickname], onDelete: Cascade, onUpdate: NoAction)
