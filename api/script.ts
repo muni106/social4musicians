@@ -1,10 +1,10 @@
 import {PrismaClient} from "@prisma/client";
 const prisma = new PrismaClient();
 
-async function main() {
+async function ciao() {
     const post = await prisma.genre.create({
         data: {
-            genrename: "Hip-hop",
+            genrename: "lello",
             genredescription: "è bello",
             origin: "america"
         }
@@ -14,7 +14,7 @@ async function main() {
     console.log(post);
     console.log(all);
   }
-main()
+ciao()
 .catch(e => {
     console.log(e.message);
 })

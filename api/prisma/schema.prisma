@@ -78,7 +78,6 @@ model genre {
   genrename        String         @id @db.VarChar(16)
   genredescription String         @db.VarChar(128)
   origin           String         @db.VarChar(256)
-  nickname         String?        @db.VarChar(16)
   appartainance    appartainance?
   follow           follow[]
 }
