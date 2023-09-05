@@ -6,8 +6,9 @@ CREATE TABLE MUSICIAN (
     locality VARCHAR(16) NOT NULL, 
     bestInstrument VARCHAR(16) NOT NULL,
     telephoneNumber VARCHAR(16) UNIQUE NOT NULL,
-    isCertified BIT NOT NULL,
-    isMaster BIT NOT NULL,
+    isCertified BOOLEAN NOT NULL,
+    isMaster BOOLEAN NOT NULL,
+    pass VARCHAR(128) NOT NULL
     PRIMARY KEY (nickname)
 );
 
@@ -57,7 +58,7 @@ CREATE TABLE POST(
 CREATE TABLE REACTION(
     nickname VARCHAR(16) NOT NULL,
     discussionID INT NOT NULL, 
-    vote BIT, 
+    vote BOOLEAN, 
     dateAndTime TIMESTAMP NOT NULL,
     PRIMARY KEY (nickname, discussionID)
 ); 
