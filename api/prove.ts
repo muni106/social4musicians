@@ -1,6 +1,6 @@
 
 import { PrismaClient } from '@prisma/client';
-import { getMusicianAccount, getMusicianProfile } from './queries/userQueries';
+import { getMusicianAccount, getMusicianProfile, updateEmail } from './queries/userQueries';
 
 const prisma: PrismaClient = new PrismaClient();
 
@@ -16,4 +16,9 @@ async function logMusicianProfile() {
 }
 logMusicianProfile();
 
+async function new_email() {
+    await updateEmail(prisma, 'bello', 'molt.206@gmail.com');
+}
+new_email();
+logMusicianProfile();
 prisma.$disconnect();
