@@ -115,6 +115,7 @@ model musician {
   telephonenumber  String             @unique @db.VarChar(16)
   iscertified      Boolean
   ismaster         Boolean
+  pass             String             @db.VarChar(128)
   chat_participant chat_participant[]
   follow           follow[]
   hashtag          hashtag[]

@@ -1,9 +1,37 @@
 import { PrismaClient } from "@prisma/client";
 
+// USER GETTERS
+export async function updateEmail(
+  prisma: PrismaClient,
+  nickname: string,
+  e_mail: string
+) {
+  const musician = await prisma.musician.update({
+    where: {
+      nickname: nickname,
+    },
+    data: {
+      e_mail: e_mail,
+    }
+  });
+  return musician;
+}
 
-
-
-
+export async function updatePassword(
+  prisma: PrismaClient,
+  nickname: string,
+  password: string
+) {
+  const musician = await prisma.musician.update({
+    where: {
+      nickname: nickname,
+    },
+    data: {
+      pass: password,
+    }
+  });
+  return musician;
+}
 
 export async function updateLocality(
   prisma: PrismaClient,
@@ -53,7 +81,7 @@ export async function updateBestInstrument(
   return musician;
 }
 
-export async function certify(
+export async function certifyUser(
   prisma: PrismaClient,
   nickname: string,
   certification: boolean 
@@ -69,7 +97,7 @@ export async function certify(
   return musician;
 }
 
-export async function masterify(
+export async function masterifyUser(
   prisma: PrismaClient,
   nickname: string,
   master: boolean 
@@ -85,4 +113,12 @@ export async function masterify(
   return musician;
 }
 
+// CHAT GETTERS
 
+
+
+// POSTS GETTERS
+
+
+
+//BAND GETTERS

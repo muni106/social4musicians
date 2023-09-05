@@ -5,5 +5,5 @@ import { userCreation } from './queries/userQueries';
 
 const prisma: PrismaClient = new PrismaClient();
 
-userCreation(prisma,'bello', 'chiello', 'Rock', 'sam.k2@example.com', 'Nashville', 'Guitar', '553-1', true, true );
+userCreation(prisma,'bello', 'chiello', 'Rock', 'sam.k2@example.com', 'Nashville', 'Guitar', '553-1', 'wejfnewlkfnke', true, true );
 prisma.$disconnect();
