@@ -49,9 +49,10 @@ model comment {
   commentid        Int        @id @default(autoincrement())
   commenttext      String     @db.VarChar(32)
   timestampcomment DateTime   @db.Timestamp(6)
+  nickname         String     @db.VarChar(16)
   discussionid     Int
   discussion       discussion @relation(fields: [discussionid], references: [discussionid], onDelete: Cascade, onUpdate: NoAction)
-  post             post[]
+  musician         musician   @relation(fields: [nickname], references: [nickname], onDelete: Cascade, onUpdate: NoAction)
 }
 
 model discussion {
@@ -59,8 +60,8 @@ model discussion {
   timestampdiscussion DateTime         @db.Timestamp(6)
   title               String           @db.VarChar(16)
   average             Int
+  nickname            String           @db.VarChar(16)
   comment             comment[]
-  post                post[]
   post_reference      post_reference[]
   reaction            reaction[]
 }
@@ -117,23 +118,12 @@ model musician {
   ismaster         Boolean
   pass             String             @db.VarChar(128)
   chat_participant chat_participant[]
+  comment          comment[]
   follow           follow[]
   hashtag          hashtag[]
-  post             post[]
   reaction         reaction[]
   release          release[]
   writing          writing[]
-}
-
-model post {
-  discussionid Int
-  commentid    Int
-  nickname     String     @db.VarChar(16)
-  comment      comment    @relation(fields: [commentid], references: [commentid], onDelete: Cascade, onUpdate: NoAction)
-  discussion   discussion @relation(fields: [discussionid], references: [discussionid], onDelete: Cascade, onUpdate: NoAction)
-  musician     musician   @relation(fields: [nickname], references: [nickname], onDelete: Cascade, onUpdate: NoAction)
-
-  @@id([discussionid, commentid, nickname])
 }
 
 model post_reference {

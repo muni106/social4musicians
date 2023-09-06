@@ -32,7 +32,6 @@ export async function userCreation(
 }
 
 
-
 // CHAT CREATIONS
 
 
@@ -42,16 +41,36 @@ export async function createDiscussion(
   prisma: PrismaClient,
   timeStamp: Date,
   title: string,
-  average: number
+  average: number,
+  nickname: string
 ) {
   const discussion = await prisma.discussion.create({
     data: {
         timestampdiscussion: timeStamp,
         title: title,
-        average: average 
+        average: average,
+        nickname: nickname
     },
   });
   return discussion;
+}
+
+export async function createComment(
+  prisma: PrismaClient,
+  timeStamp: Date,
+  text: string,
+  sender: string,
+  discussion: number
+) {
+  const comment = await prisma.comment.create({
+    data: {
+        commenttext: text,
+        nickname: sender,
+        timestampcomment: timeStamp,
+        discussionid: discussion
+    },
+  });
+  return comment;
 }
 
 
