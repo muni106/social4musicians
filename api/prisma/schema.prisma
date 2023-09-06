@@ -62,6 +62,7 @@ model discussion {
   average             Int
   nickname            String           @db.VarChar(16)
   comment             comment[]
+  musician            musician         @relation(fields: [nickname], references: [nickname], onDelete: Cascade, onUpdate: NoAction)
   post_reference      post_reference[]
   reaction            reaction[]
 }
@@ -119,6 +120,7 @@ model musician {
   pass             String             @db.VarChar(128)
   chat_participant chat_participant[]
   comment          comment[]
+  discussion       discussion[]
   follow           follow[]
   hashtag          hashtag[]
   reaction         reaction[]
