@@ -85,6 +85,17 @@ export async function followGenre(
   }
 }
 
+export async function createHashTag(
+  prisma: PrismaClient,
+  hashtagName: string,
+) {
+  const tag = await prisma.hashtag.create({
+    data: {
+      hashtagname: hashtagName
+    }
+  })
+  return hashtagName;
+}
 // CHAT CREATIONS
 
 // POSTS CREATIONS

@@ -86,8 +86,7 @@ model genre {
 
 model hashtag {
   hashtagname    String           @id @db.VarChar(10)
-  nickname       String           @db.VarChar(16)
-  musician       musician         @relation(fields: [nickname], references: [nickname], onDelete: Cascade, onUpdate: NoAction)
+  observation    observation[]
   post_reference post_reference[]
 }
 
@@ -122,7 +121,7 @@ model musician {
   comment          comment[]
   discussion       discussion[]
   follow           follow[]
-  hashtag          hashtag[]
+  observation      observation[]
   reaction         reaction[]
   release          release[]
   writing          writing[]
@@ -175,4 +174,13 @@ model writing {
   band     band?     @relation(fields: [bandname], references: [bandname], onDelete: Cascade, onUpdate: NoAction)
   musician musician? @relation(fields: [nickname], references: [nickname], onDelete: Cascade, onUpdate: NoAction)
   song     song      @relation(fields: [songid], references: [songid], onDelete: Cascade, onUpdate: NoAction)
+}
+
+model observation {
+  hashtagname String   @db.VarChar(10)
+  nickname    String   @db.VarChar(16)
+  hashtag     hashtag  @relation(fields: [hashtagname], references: [hashtagname], onDelete: Cascade, onUpdate: NoAction)
+  musician    musician @relation(fields: [nickname], references: [nickname], onDelete: Cascade, onUpdate: NoAction)
+
+  @@id([hashtagname, nickname])
 }

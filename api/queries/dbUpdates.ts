@@ -1,6 +1,6 @@
 import { PrismaClient } from "@prisma/client";
 
-// USER GETTERS
+// USER UPDATES
 export async function updateEmail(
   prisma: PrismaClient,
   nickname: string,
@@ -113,13 +113,62 @@ export async function masterifyUser(
   return musician;
 }
 
+export async function updateHashtagObserved(
+  prisma: PrismaClient,
+  nickName: string,
+  hashtag: string
+) {
+  const obs = await prisma.observation.findFirst({
+    where: {
+      nickname: nickName,
+      hashtagname: hashtag
+    }
+  });
+  if(!obs) {
+    const observasionUpdate = await prisma.observation.create({
+      data: {
+        nickname: nickName,
+        hashtagname: hashtag
+      }
+    });
+    
+    const user = await prisma.musician.update({
+      where: {
+        nickname: nickName
+      },
+      data: {
+        observation: {
+          connect: {
+            hashtagname_nickname: observasionUpdate
+          }
+        }
+      }
+    });
+
+    await prisma.hashtag.update({
+      where: {
+        hashtagname: hashtag
+      },
+      data: {
+        observation: {
+          connect: {
+            hashtagname_nickname: observasionUpdate
+          }
+        }
+      }
+    });
+    return user;
+  };
+}
 
 
-// CHAT GETTERS
+
+
+// CHAT UPDATES
 
 
 
-// POSTS GETTERS
+// POSTS UPDATES
 export async function updateDiscussionTitle(
   prisma: PrismaClient,
   newTitle: string,
@@ -137,4 +186,5 @@ export async function updateDiscussionTitle(
 }
 
 
-//BAND GETTERS
+
+//BAND UPDATES
