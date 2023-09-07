@@ -96,7 +96,59 @@ export async function createHashTag(
   })
   return hashtagName;
 }
+
 // CHAT CREATIONS
+export async function createChat(
+  prisma: PrismaClient,
+  participantID: number,
+  chatName: string,
+) {
+  const chat = await prisma.chat.create({
+    data: {
+      participantid: participantID,
+      chatname: chatName
+    }
+  });
+  return chat;
+}
+
+export async function createMessage(
+  prisma: PrismaClient,
+  chatTargetID: number,
+  senderID: number,
+  messageText: string,
+  timeStamp: Date 
+) {
+  try {
+    const message = await prisma.message.create({
+      data: {
+        chatid: chatTargetID,
+        participantid: senderID,
+        messagetext: messageText,
+        timestampmessage: timeStamp
+      }
+    });
+    
+    await prisma.chat.update({
+      where: {
+        chatid: chatTargetID
+      },
+      data: {
+        message: {
+          connect: {
+            messageid: message.messageid
+          }
+        }
+      } 
+    });
+    return message;
+  } catch (error) {
+    console.error('something went wrong', error);
+  }
+}
+
+
+
 
 // POSTS CREATIONS
 
@@ -206,5 +258,46 @@ export async function createReaction(
     });
     return discussion;
 }
+
+export async function addHashtagToPost(
+  prisma: PrismaClient,
+  discussionID: number,
+  hashtag: string
+) {
+  const tag = await prisma.post_reference.create({
+    data: {
+      discussionid: discussionID,
+      hashtagname: hashtag
+    }
+  });
+  
+  await prisma.discussion.update({
+    where: {
+      discussionid: discussionID
+    },
+    data: {
+      post_reference: {
+        connect: {
+          discussionid_hashtagname: tag
+        }
+      }
+    }
+  });
+
+  const hashtags = await prisma.hashtag.update({
+    where: {
+      hashtagname: hashtag
+    },
+    data: {
+      post_reference: {
+        connect: {
+          discussionid_hashtagname: tag
+        }
+      }
+    }
+  });
+  return hashtag;
+}
+
 
 //band part

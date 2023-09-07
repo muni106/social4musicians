@@ -36,7 +36,20 @@ export async function getMusicianProfile(
 }
 
 // CHAT GETTERS
-
+export async function getChatMessages(
+  prisma: PrismaClient,
+  chatID: number
+) {
+  const chat = await prisma.chat.findUnique({
+    where: {
+      chatid: chatID
+    },
+    include: {
+      message: true,
+    }
+  });
+  return chat?.message;
+}
 
 
 // POSTS GETTERS

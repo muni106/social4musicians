@@ -50,6 +50,42 @@ export async function deleteReaction(
   })
 }
 
+export async function deletePostReference(
+  prisma: PrismaClient,
+  discussionID: number,
+  hashtag: string
+) {
+  const deletedReference = await prisma.post_reference.deleteMany({
+    where: {
+      hashtagname: hashtag,
+      discussionid: discussionID
+    }
+  });
+}
 
-// BAND DELETING 
+// BAND DELETING
+
 // CHAT DELETING 
+export async function deleteChat(
+  prisma: PrismaClient,
+  chatID: number
+) {
+  const deletedChat = await prisma.chat.delete({
+    where: {
+      chatid: chatID
+    }
+  });
+  return deleteChat;
+}
+
+export async function deleteMessage(
+  prisma: PrismaClient,
+  messageID: number
+) {
+  await prisma.message.delete({
+    where: {
+      messageid: messageID
+    }
+  });
+  
+}

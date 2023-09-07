@@ -102,6 +102,7 @@ model message {
   chatid           Int
   participantid    Int
   messagetext      String           @db.VarChar(255)
+  timestampmessage DateTime         @db.Date
   chat             chat             @relation(fields: [chatid], references: [chatid], onDelete: Cascade, onUpdate: NoAction)
   chat_participant chat_participant @relation(fields: [participantid], references: [participantid], onDelete: Cascade, onUpdate: NoAction)
 }

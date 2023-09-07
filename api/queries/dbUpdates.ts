@@ -167,7 +167,6 @@ export async function updateHashtagObserved(
 // CHAT UPDATES
 
 
-
 // POSTS UPDATES
 export async function updateDiscussionTitle(
   prisma: PrismaClient,
