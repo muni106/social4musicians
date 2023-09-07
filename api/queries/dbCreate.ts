@@ -1,4 +1,4 @@
-import { PrismaClient } from "@prisma/client";
+import { Prisma, PrismaClient } from "@prisma/client";
 
 // USER SECTION
 export async function userCreation(
@@ -100,12 +100,10 @@ export async function createHashTag(
 // CHAT CREATIONS
 export async function createChat(
   prisma: PrismaClient,
-  participantID: number,
   chatName: string,
 ) {
   const chat = await prisma.chat.create({
     data: {
-      participantid: participantID,
       chatname: chatName
     }
   });
@@ -115,36 +113,52 @@ export async function createChat(
 export async function createMessage(
   prisma: PrismaClient,
   chatTargetID: number,
-  senderID: number,
+  nickName: string,
   messageText: string,
   timeStamp: Date 
 ) {
   try {
-    const message = await prisma.message.create({
+    const newMessage = await prisma.message.create({
       data: {
         chatid: chatTargetID,
-        participantid: senderID,
+        nickname: nickName,
         messagetext: messageText,
         timestampmessage: timeStamp
       }
     });
-    
-    await prisma.chat.update({
+    const participant = await prisma.chat_participant.update({
       where: {
-        chatid: chatTargetID
+        chatid: chatTargetID,
+        nickname: nickName
       },
       data: {
         message: {
           connect: {
-            messageid: message.messageid
+            messageid: newMessage.messageid 
           }
         }
-      } 
+      }
     });
-    return message;
+    return participant;
   } catch (error) {
     console.error('something went wrong', error);
   }
+}
+
+export async function addChatParticipant(
+  prisma: PrismaClient,
+  nickName: string,
+  entry: Date,
+  chatID: number
+) {
+  const participant = await prisma.chat_participant.create({
+    data: {
+      nickname: nickName,
+      entrydate: entry,
+      chatid: chatID
+    }
+  });
+
 }
 
 

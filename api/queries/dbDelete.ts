@@ -87,5 +87,18 @@ export async function deleteMessage(
       messageid: messageID
     }
   });
-  
+
+}
+
+export async function deleteChatParticipant(
+  prisma: PrismaClient,
+  nickName: string,
+  chatID: number
+) {
+  await prisma.chat_participant.delete({
+    where: {
+      nickname: nickName,
+      chatid: chatID
+    }
+  });
 }

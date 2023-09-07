@@ -40,7 +40,7 @@ export async function getChatMessages(
   prisma: PrismaClient,
   chatID: number
 ) {
-  const chat = await prisma.chat.findUnique({
+  const participant = await prisma.chat_participant.findMany({
     where: {
       chatid: chatID
     },
@@ -48,8 +48,10 @@ export async function getChatMessages(
       message: true,
     }
   });
-  return chat?.message;
+  const messages = participant.map((x) => x.message).flat(1);
+  return messages;
 }
+
 
 
 // POSTS GETTERS

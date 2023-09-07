@@ -30,19 +30,21 @@ model band {
 }
 
 model chat {
-  chatid        Int       @id @default(autoincrement())
-  participantid Int
-  chatname      String    @db.VarChar(10)
-  message       message[]
+  chatid           Int                @id @default(autoincrement())
+  chatname         String             @db.VarChar(10)
+  chat_participant chat_participant[]
 }
 
 model chat_participant {
-  participantid Int       @id @default(autoincrement())
-  entrydate     DateTime  @unique @db.Date
-  exitdate      DateTime? @unique @db.Date
-  nickname      String    @db.VarChar(16)
-  musician      musician  @relation(fields: [nickname], references: [nickname], onDelete: Cascade, onUpdate: NoAction)
-  message       message[]
+  chatid    Int
+  entrydate DateTime  @db.Date
+  exitdate  DateTime? @db.Date
+  nickname  String    @unique @db.VarChar(16)
+  chat      chat      @relation(fields: [chatid], references: [chatid], onDelete: Cascade, onUpdate: NoAction)
+  musician  musician  @relation(fields: [nickname], references: [nickname], onDelete: Cascade, onUpdate: NoAction)
+  message   message[]
+
+  @@id([chatid, nickname])
 }
 
 model comment {
@@ -100,25 +102,24 @@ model influence {
 model message {
   messageid        Int              @id @default(autoincrement())
   chatid           Int
-  participantid    Int
+  nickname         String           @db.VarChar(16)
   messagetext      String           @db.VarChar(255)
   timestampmessage DateTime         @db.Date
-  chat             chat             @relation(fields: [chatid], references: [chatid], onDelete: Cascade, onUpdate: NoAction)
-  chat_participant chat_participant @relation(fields: [participantid], references: [participantid], onDelete: Cascade, onUpdate: NoAction)
+  chat_participant chat_participant @relation(fields: [chatid, nickname], references: [chatid, nickname], onDelete: Cascade, onUpdate: NoAction)
 }
 
 model musician {
-  nickname         String             @id @db.VarChar(16)
-  firstname        String             @db.VarChar(20)
-  lastname         String             @db.VarChar(20)
-  e_mail           String?            @unique @db.VarChar(100)
-  locality         String             @db.VarChar(16)
-  bestinstrument   String             @db.VarChar(16)
-  telephonenumber  String             @unique @db.VarChar(16)
+  nickname         String            @id @db.VarChar(16)
+  firstname        String            @db.VarChar(20)
+  lastname         String            @db.VarChar(20)
+  e_mail           String?           @unique @db.VarChar(100)
+  locality         String            @db.VarChar(16)
+  bestinstrument   String            @db.VarChar(16)
+  telephonenumber  String            @unique @db.VarChar(16)
   iscertified      Boolean
   ismaster         Boolean
-  pass             String             @db.VarChar(128)
-  chat_participant chat_participant[]
+  pass             String            @db.VarChar(128)
+  chat_participant chat_participant?
   comment          comment[]
   discussion       discussion[]
   follow           follow[]

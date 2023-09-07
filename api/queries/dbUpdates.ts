@@ -166,6 +166,36 @@ export async function updateHashtagObserved(
 
 // CHAT UPDATES
 
+export async function exitChatParticipant(
+  prisma: PrismaClient,
+  nickName: string,
+  chatID: number,
+  exitDate: Date
+) {
+  const user = await prisma.chat_participant.findUnique({
+    where: {
+      chatid: chatID,
+      nickname: nickName
+    }
+  });
+  if(!user) {
+    console.log("user not found");
+  } else if(!user.exitdate) {
+    const exitedUser = await prisma.chat_participant.update({
+      where: {
+        chatid: chatID,
+        nickname: nickName
+      },
+      data: {
+        exitdate: exitDate
+      } 
+    })
+    return exitedUser;
+  }else {
+    console.log("user already exited");
+    return user;
+  }
+}
 
 // POSTS UPDATES
 export async function updateDiscussionTitle(
