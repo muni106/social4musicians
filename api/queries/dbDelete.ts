@@ -25,6 +25,31 @@ export async function deleteUserByNickname(
   const transaction = await prisma.$transaction([deletePosts, deleteComments, deleteMusician])
 }
 
+export async function removeFollowInstance(
+  prisma: PrismaClient,
+  genreName: string,
+  nickName: string,
+) {
+  await prisma.follow.delete({
+    where: {
+      genrename_nickname: { genrename: genreName, nickname: nickName },
+    }
+  });
+}
+
+export async function removeInfluenceInstance(
+  prisma: PrismaClient,
+  genreName: string,
+  nickName: string,
+) {
+  await prisma.influence.delete({
+    where: {
+      genrename_nickname: { genrename: genreName, nickname: nickName },
+    }
+  });
+}
+
+
 // POST DELETING 
 export async function deleteComment(
   prisma: PrismaClient,
@@ -42,10 +67,9 @@ export async function deleteReaction(
   nickName: string,
   discussionID: number
 ) {
-  await prisma.reaction.deleteMany({
+  await prisma.reaction.delete({
     where: {
-      nickname: nickName,
-      discussionid: discussionID
+      nickname_discussionid: {nickname: nickName, discussionid: discussionID},
     }
   })
 }
@@ -55,10 +79,9 @@ export async function deletePostReference(
   discussionID: number,
   hashtag: string
 ) {
-  const deletedReference = await prisma.post_reference.deleteMany({
+  const deletedReference = await prisma.post_reference.delete({
     where: {
-      hashtagname: hashtag,
-      discussionid: discussionID
+      discussionid_hashtagname: { hashtagname: hashtag, discussionid: discussionID }
     }
   });
 }
@@ -75,7 +98,7 @@ export async function deleteChat(
       chatid: chatID
     }
   });
-  return deleteChat;
+  return deletedChat;
 }
 
 export async function deleteMessage(

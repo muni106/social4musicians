@@ -1,4 +1,4 @@
-import { PrismaClient } from "@prisma/client";
+import { Prisma, PrismaClient } from "@prisma/client";
 
 // USER UPDATES
 export async function updateEmail(
@@ -217,3 +217,19 @@ export async function updateDiscussionTitle(
 
 
 //BAND UPDATES
+
+export async function exitBand(
+  prisma: PrismaClient,
+  exitDate: string,
+  nickName: string,
+  bandName: string
+) {
+  await prisma.band_member.update({
+    where: {
+      nickname_bandname: {nickname: nickName, bandname: bandName},
+    },
+    data: {
+      exittimestamp: exitDate
+    }
+  });
+}

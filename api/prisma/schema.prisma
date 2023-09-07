@@ -23,8 +23,9 @@ model appartainance {
 }
 
 model band {
-  bandname       String    @id @db.VarChar(10)
-  foundationdate DateTime  @db.Date
+  bandname       String        @id @db.VarChar(10)
+  foundationdate DateTime      @db.Date
+  band_member    band_member[]
   release        release[]
   writing        writing[]
 }
@@ -84,6 +85,7 @@ model genre {
   origin           String         @db.VarChar(256)
   appartainance    appartainance?
   follow           follow[]
+  influence        influence[]
 }
 
 model hashtag {
@@ -93,8 +95,10 @@ model hashtag {
 }
 
 model influence {
-  genrename String @db.VarChar(16)
-  nickname  String @db.VarChar(16)
+  genrename String   @db.VarChar(16)
+  nickname  String   @db.VarChar(16)
+  genre     genre    @relation(fields: [genrename], references: [genrename], onDelete: Cascade, onUpdate: NoAction)
+  musician  musician @relation(fields: [nickname], references: [nickname], onDelete: Cascade, onUpdate: NoAction)
 
   @@id([genrename, nickname])
 }
@@ -104,7 +108,7 @@ model message {
   chatid           Int
   nickname         String           @db.VarChar(16)
   messagetext      String           @db.VarChar(255)
-  timestampmessage DateTime         @db.Date
+  timestampmessage DateTime         @db.Timestamp(6)
   chat_participant chat_participant @relation(fields: [chatid, nickname], references: [chatid, nickname], onDelete: Cascade, onUpdate: NoAction)
 }
 
@@ -119,10 +123,12 @@ model musician {
   iscertified      Boolean
   ismaster         Boolean
   pass             String            @db.VarChar(128)
+  band_member      band_member[]
   chat_participant chat_participant?
   comment          comment[]
   discussion       discussion[]
   follow           follow[]
+  influence        influence[]
   observation      observation[]
   reaction         reaction[]
   release          release[]
@@ -170,12 +176,13 @@ model song {
 }
 
 model writing {
-  songid   Int       @id
-  nickname String?   @db.VarChar(16)
-  bandname String?   @db.VarChar(10)
-  band     band?     @relation(fields: [bandname], references: [bandname], onDelete: Cascade, onUpdate: NoAction)
-  musician musician? @relation(fields: [nickname], references: [nickname], onDelete: Cascade, onUpdate: NoAction)
-  song     song      @relation(fields: [songid], references: [songid], onDelete: Cascade, onUpdate: NoAction)
+  songid          Int       @id
+  nickname        String?   @db.VarChar(16)
+  bandname        String?   @db.VarChar(10)
+  publicationdate DateTime  @db.Date
+  band            band?     @relation(fields: [bandname], references: [bandname], onDelete: Cascade, onUpdate: NoAction)
+  musician        musician? @relation(fields: [nickname], references: [nickname], onDelete: Cascade, onUpdate: NoAction)
+  song            song      @relation(fields: [songid], references: [songid], onDelete: Cascade, onUpdate: NoAction)
 }
 
 model observation {
@@ -185,4 +192,15 @@ model observation {
   musician    musician @relation(fields: [nickname], references: [nickname], onDelete: Cascade, onUpdate: NoAction)
 
   @@id([hashtagname, nickname])
+}
+
+model band_member {
+  nickname       String    @db.VarChar(16)
+  bandname       String    @db.VarChar(10)
+  entrytimestamp DateTime  @db.Timestamp(6)
+  exittimestamp  DateTime? @db.Timestamp(6)
+  band           band      @relation(fields: [bandname], references: [bandname], onDelete: Cascade, onUpdate: NoAction)
+  musician       musician  @relation(fields: [nickname], references: [nickname], onDelete: Cascade, onUpdate: NoAction)
+
+  @@id([nickname, bandname])
 }

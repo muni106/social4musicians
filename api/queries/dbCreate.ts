@@ -97,6 +97,60 @@ export async function createHashTag(
   return hashtagName;
 }
 
+export async function addInfluenceGenre(
+  prisma: PrismaClient,
+  nickName: string,
+  genreName: string
+) {
+  try {
+    //verify musician existence
+    const musician = await prisma.musician.findUnique({
+      where: { nickname: nickName }, // Replace 1 with the actual ID of the EntityA
+      include: { follow: true }, // Include the existing EntityBs related to EntityA
+    });
+    if (!musician) {
+      console.error("musician not found");
+      return;
+    }
+
+    //verify genre existence
+    const existingGenre = await prisma.genre.findUnique({
+      where: {
+        genrename: genreName,
+      },
+    });
+    if (!existingGenre) {
+      console.error("genre not found");
+      return;
+    }
+
+    const newInfluence = await prisma.influence.create({
+      data: {
+        nickname: nickName,
+        genrename: genreName,
+      },
+    });
+
+    // Step 3: Add the new EntityB to the collection of EntityBs related to EntityA
+    const updatedUser = await prisma.musician.update({
+      where: { nickname: nickName },
+      data: {
+        follow: {
+          connect: [
+            {
+              genrename_nickname: newInfluence,
+            },
+          ],
+        },
+      },
+    });
+
+    console.log("EntityB added to EntityA:", updatedUser);
+  } catch (error) {
+    console.error("Error adding EntityB to EntityA:", error);
+  }
+}
+
 // CHAT CREATIONS
 export async function createChat(
   prisma: PrismaClient,
@@ -160,8 +214,6 @@ export async function addChatParticipant(
   });
 
 }
-
-
 
 
 // POSTS CREATIONS
@@ -315,3 +367,215 @@ export async function addHashtagToPost(
 
 
 //band part
+
+export async function createBand(
+  prisma: PrismaClient,
+  bandName: string,
+  foundationDate: Date 
+){
+  const band = await prisma.band.create({
+    data: {
+      bandname: bandName,
+      foundationdate: foundationDate
+    }
+  });
+  return band;
+}
+
+
+export async function createBandMember(
+  prisma: PrismaClient,
+  nickName: string,
+  bandName: string,
+  entryTime: Date
+) {
+  const bandMember = await prisma.band_member.create({
+    data: {
+      nickname: nickName,
+      bandname: bandName,
+      entrytimestamp: entryTime
+    }
+  });
+
+  const band = await prisma.band.update({
+    where: {
+      bandname: bandName
+    },
+    data: {
+      band_member: {
+        connect: {
+          nickname_bandname: bandMember,
+        }
+      }
+    }
+  });
+
+  await prisma.musician.update({
+    where: {
+      nickname: nickName,
+    },
+    data: {
+      band_member: {
+        connect: {
+          nickname_bandname: bandMember,
+        }
+      }
+    }
+  });
+
+  return band;
+};
+
+export async function createSongByBand(
+  prisma: PrismaClient,
+  musickTrack: number,
+  songName: string,
+  duration: number,
+  albumID: number,
+  bandName: string,
+  publicationDate: string
+) {
+  const song = await prisma.song.create({
+    data: {
+      musictrack: musickTrack,
+      songname: songName,
+      duration: duration,
+      albumid: albumID
+    }
+  });
+
+  const writing = await prisma.writing.create({
+    data: {
+      bandname: bandName,
+      songid: song.songid,
+      publicationdate: publicationDate
+    }
+  });
+
+  const band = await prisma.band.update({
+    where: {
+      bandname: bandName,
+    },
+    data: {
+      writing: {
+        connect: {
+          songid: song.songid
+        }
+      }
+    }
+  });
+
+  return band;
+}
+
+export async function createSongByMusician(
+  prisma: PrismaClient,
+  musickTrack: number,
+  songName: string,
+  duration: number,
+  albumID: number,
+  nickName: string,
+  publicationDate: string
+) {
+  const song = await prisma.song.create({
+    data: {
+      musictrack: musickTrack,
+      songname: songName,
+      duration: duration,
+      albumid: albumID
+    }
+  });
+
+  const writing = await prisma.writing.create({
+    data: {
+      nickname: nickName,
+      songid: song.songid,
+      publicationdate: publicationDate
+    }
+  });
+
+  const musician = await prisma.musician.update({
+    where: {
+      nickname: nickName
+    },
+    data: {
+      writing: {
+        connect: {
+          songid: song.songid
+        }
+      }
+    }
+  });
+
+  return musician;
+}
+
+export async function createAlbumByBand(
+  prisma: PrismaClient,
+  albumName: string,
+  realeseDate: Date,
+  bandName: string
+) {
+  const album = await prisma.album.create({
+    data: {
+      albumname: albumName,
+      realesedate: realeseDate
+    }
+  });
+
+  const release = await prisma.release.create({
+    data: {
+      bandname: bandName,
+      albumid: album.albumid,
+    }
+  });
+
+  const band = await prisma.band.update({
+    where: {
+      bandname: bandName,
+    },
+    data: {
+      release: {
+        connect: {
+          albumid: album.albumid 
+        }
+      }
+    }
+  });
+  return release;
+}
+
+export async function createAlbumByAlbum(
+  prisma: PrismaClient,
+  albumName: string,
+  realeseDate: Date,
+  nickName: string
+) {
+  const album = await prisma.album.create({
+    data: {
+      albumname: albumName,
+      realesedate: realeseDate
+    }
+  });
+
+  const release = await prisma.release.create({
+    data: {
+      nickname: nickName,
+      albumid: album.albumid,
+    }
+  });
+
+  const musician = await prisma.musician.update({
+    where: {
+      nickname: nickName
+    },
+    data: {
+      release: {
+        connect: {
+          albumid: album.albumid 
+        }
+      }
+    }
+  });
+  return release;
+}
