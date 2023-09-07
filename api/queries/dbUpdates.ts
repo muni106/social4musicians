@@ -233,3 +233,82 @@ export async function exitBand(
     }
   });
 }
+
+export async function changeAlbumName(
+  prisma: PrismaClient,
+  albumID: number,
+  newName: string,
+) {
+  const album = await prisma.album.update({
+    where: {
+      albumid: albumID,
+    },
+    data: {
+      albumname: newName
+    }
+  });
+  return album;
+}
+
+export async function addSongToAlbum(
+  prisma: PrismaClient,
+  songID: number,
+  albumID: number
+) {
+  const song = await prisma.song.findUnique({
+    where: {
+      songid: songID
+    }
+  });
+
+  if(!song) {
+    console.log("song not exist");
+    return 
+  }
+
+  const album = await prisma.album.update({
+    where: {
+      albumid: albumID
+    },
+    data: {
+      song: {
+        connect: {
+          songid: song?.songid
+        }
+      }
+    }
+  });
+
+  return album;
+}
+
+export async function addSongGenre(
+  prisma: PrismaClient,
+  songID: number,
+  genreName: string
+) {
+  const genre = await prisma.genre.findUnique({
+    where: {
+      genrename: genreName,
+    }
+  });
+
+  if(!genre) {
+    console.log("genre not found");
+    return ;
+  }
+
+  const song = await prisma.song.update({
+    where: {
+      songid: songID,
+    },
+    data: {
+      appartainance: {
+        connect: {
+          genrename: genreName
+        }
+      }
+    }
+  });
+  return song;
+}

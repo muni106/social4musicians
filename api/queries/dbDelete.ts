@@ -125,3 +125,37 @@ export async function deleteChatParticipant(
     }
   });
 }
+
+export async function deleteMusicAlbum(
+  prisma: PrismaClient,
+  albumID: number
+) {
+  await prisma.album.delete({
+    where: {
+      albumid: albumID
+    }
+  });
+  await prisma.release.delete({
+    where: {
+      albumid: albumID
+    }
+  })
+}
+
+export async function deleteSong(
+  prisma: PrismaClient,
+  songID: number
+) {
+    await prisma.song.delete({
+      where: {
+        songid:songID
+      }
+    });
+
+    await prisma.writing.delete({
+      where: {
+        songid: songID
+      }
+    });
+    
+}
