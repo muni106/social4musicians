@@ -31,6 +31,22 @@ export async function userCreation(
   console.log(user);
 }
 
+export async function createGenre(
+  prisma: PrismaClient,
+  genreName: string,
+  origin: string,
+  genreDescription: string
+) {
+  const genre = await prisma.genre.create({
+    data: {
+      genrename: genreName,
+      genredescription: genreDescription,
+      origin: origin
+    }
+  });
+  console.log(genre);
+}
+
 export async function followGenre(
   prisma: PrismaClient,
   nickName: string,
