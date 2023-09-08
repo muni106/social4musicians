@@ -1,11 +1,11 @@
 import { PrismaClient } from "@prisma/client";
 
-// USER DELETING 
+// USER DELETING
 export async function deleteUserByNickname(
   prisma: PrismaClient,
   nickName: string
 ) {
-  const deleteMusician = prisma.musician.delete({
+  const deleteArtist = prisma.artist.delete({
     where: {
       nickname: nickName,
     },
@@ -13,51 +13,51 @@ export async function deleteUserByNickname(
 
   const deletePosts = prisma.discussion.deleteMany({
     where: {
-        nickname: nickName, 
+      nickname: nickName,
     },
   });
 
   const deleteComments = prisma.comment.deleteMany({
     where: {
-      nickname: nickName
+      nickname: nickName,
     },
   });
-  const transaction = await prisma.$transaction([deletePosts, deleteComments, deleteMusician])
+  const transaction = await prisma.$transaction([
+    deletePosts,
+    deleteComments,
+    deleteArtist,
+  ]);
 }
 
 export async function removeFollowInstance(
   prisma: PrismaClient,
   genreName: string,
-  nickName: string,
+  nickName: string
 ) {
   await prisma.follow.delete({
     where: {
       genrename_nickname: { genrename: genreName, nickname: nickName },
-    }
+    },
   });
 }
 
 export async function removeInfluenceInstance(
   prisma: PrismaClient,
   genreName: string,
-  nickName: string,
+  nickName: string
 ) {
   await prisma.influence.delete({
     where: {
       genrename_nickname: { genrename: genreName, nickname: nickName },
-    }
+    },
   });
 }
 
-
-// POST DELETING 
-export async function deleteComment(
-  prisma: PrismaClient,
-  commentID: number
-) {
+// POST DELETING
+export async function deleteComment(prisma: PrismaClient, commentID: number) {
   const commentDeleted = prisma.comment.delete({
     where: {
-        commentid: commentID,
+      commentid: commentID,
     },
   });
 }
@@ -69,9 +69,9 @@ export async function deleteReaction(
 ) {
   await prisma.reaction.delete({
     where: {
-      nickname_discussionid: {nickname: nickName, discussionid: discussionID},
-    }
-  })
+      nickname_discussionid: { nickname: nickName, discussionid: discussionID },
+    },
+  });
 }
 
 export async function deletePostReference(
@@ -81,36 +81,32 @@ export async function deletePostReference(
 ) {
   const deletedReference = await prisma.post_reference.delete({
     where: {
-      discussionid_hashtagname: { hashtagname: hashtag, discussionid: discussionID }
-    }
+      discussionid_hashtagname: {
+        hashtagname: hashtag,
+        discussionid: discussionID,
+      },
+    },
   });
 }
 
 // BAND DELETING
 
-// CHAT DELETING 
-export async function deleteChat(
-  prisma: PrismaClient,
-  chatID: number
-) {
+// CHAT DELETING
+export async function deleteChat(prisma: PrismaClient, chatID: number) {
   const deletedChat = await prisma.chat.delete({
     where: {
-      chatid: chatID
-    }
+      chatid: chatID,
+    },
   });
   return deletedChat;
 }
 
-export async function deleteMessage(
-  prisma: PrismaClient,
-  messageID: number
-) {
+export async function deleteMessage(prisma: PrismaClient, messageID: number) {
   await prisma.message.delete({
     where: {
-      messageid: messageID
-    }
+      messageid: messageID,
+    },
   });
-
 }
 
 export async function deleteChatParticipant(
@@ -121,41 +117,23 @@ export async function deleteChatParticipant(
   await prisma.chat_participant.delete({
     where: {
       nickname: nickName,
-      chatid: chatID
-    }
+      chatid: chatID,
+    },
   });
 }
 
-export async function deleteMusicAlbum(
-  prisma: PrismaClient,
-  albumID: number
-) {
+export async function deleteMusicAlbum(prisma: PrismaClient, albumID: number) {
   await prisma.album.delete({
     where: {
-      albumid: albumID
-    }
+      albumid: albumID,
+    },
   });
-  await prisma.release.delete({
-    where: {
-      albumid: albumID
-    }
-  })
 }
 
-export async function deleteSong(
-  prisma: PrismaClient,
-  songID: number
-) {
-    await prisma.song.delete({
-      where: {
-        songid:songID
-      }
-    });
-
-    await prisma.writing.delete({
-      where: {
-        songid: songID
-      }
-    });
-    
+export async function deleteSong(prisma: PrismaClient, songID: number) {
+  await prisma.song.delete({
+    where: {
+      songid: songID,
+    },
+  });
 }

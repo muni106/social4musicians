@@ -6,15 +6,15 @@ export async function updateEmail(
   nickname: string,
   e_mail: string
 ) {
-  const musician = await prisma.musician.update({
+  const artist = await prisma.artist.update({
     where: {
       nickname: nickname,
     },
     data: {
       e_mail: e_mail,
-    }
+    },
   });
-  return musician;
+  return artist;
 }
 
 export async function updatePassword(
@@ -22,15 +22,15 @@ export async function updatePassword(
   nickname: string,
   password: string
 ) {
-  const musician = await prisma.musician.update({
+  const artist = await prisma.artist.update({
     where: {
       nickname: nickname,
     },
     data: {
       pass: password,
-    }
+    },
   });
-  return musician;
+  return artist;
 }
 
 export async function updateLocality(
@@ -38,31 +38,31 @@ export async function updateLocality(
   nickname: string,
   locality: string
 ) {
-  const musician = await prisma.musician.update({
+  const artist = await prisma.artist.update({
     where: {
       nickname: nickname,
     },
     data: {
       locality: locality,
-    }
+    },
   });
-  return musician;
+  return artist;
 }
 
 export async function updateTelephone(
   prisma: PrismaClient,
   nickname: string,
-  telephoneNumber : string
+  telephoneNumber: string
 ) {
-  const musician = await prisma.musician.update({
+  const artist = await prisma.artist.update({
     where: {
       nickname: nickname,
     },
     data: {
       telephonenumber: telephoneNumber,
-    }
+    },
   });
-  return musician;
+  return artist;
 }
 
 export async function updateBestInstrument(
@@ -70,47 +70,47 @@ export async function updateBestInstrument(
   nickname: string,
   bestInstrument: string
 ) {
-  const musician = await prisma.musician.update({
+  const artist = await prisma.artist.update({
     where: {
       nickname: nickname,
     },
     data: {
       bestinstrument: bestInstrument,
-    }
+    },
   });
-  return musician;
+  return artist;
 }
 
 export async function certifyUser(
   prisma: PrismaClient,
   nickname: string,
-  certification: boolean 
+  certification: boolean
 ) {
-  const musician = await prisma.musician.update({
+  const artist = await prisma.artist.update({
     where: {
       nickname: nickname,
     },
     data: {
       iscertified: certification,
-    }
+    },
   });
-  return musician;
+  return artist;
 }
 
 export async function masterifyUser(
   prisma: PrismaClient,
   nickname: string,
-  master: boolean 
+  master: boolean
 ) {
-  const musician = await prisma.musician.update({
+  const artist = await prisma.artist.update({
     where: {
       nickname: nickname,
     },
     data: {
       ismaster: master,
-    }
+    },
   });
-  return musician;
+  return artist;
 }
 
 export async function updateHashtagObserved(
@@ -121,47 +121,45 @@ export async function updateHashtagObserved(
   const obs = await prisma.observation.findFirst({
     where: {
       nickname: nickName,
-      hashtagname: hashtag
-    }
+      hashtagname: hashtag,
+    },
   });
-  if(!obs) {
+  if (!obs) {
     const observasionUpdate = await prisma.observation.create({
       data: {
         nickname: nickName,
-        hashtagname: hashtag
-      }
+        hashtagname: hashtag,
+      },
     });
-    
-    const user = await prisma.musician.update({
+
+    const user = await prisma.artist.update({
       where: {
-        nickname: nickName
+        nickname: nickName,
       },
       data: {
         observation: {
           connect: {
-            hashtagname_nickname: observasionUpdate
-          }
-        }
-      }
+            hashtagname_nickname: observasionUpdate,
+          },
+        },
+      },
     });
 
     await prisma.hashtag.update({
       where: {
-        hashtagname: hashtag
+        hashtagname: hashtag,
       },
       data: {
         observation: {
           connect: {
-            hashtagname_nickname: observasionUpdate
-          }
-        }
-      }
+            hashtagname_nickname: observasionUpdate,
+          },
+        },
+      },
     });
     return user;
-  };
+  }
 }
-
-
 
 // CHAT UPDATES
 
@@ -174,23 +172,23 @@ export async function exitChatParticipant(
   const user = await prisma.chat_participant.findUnique({
     where: {
       chatid: chatID,
-      nickname: nickName
-    }
+      nickname: nickName,
+    },
   });
-  if(!user) {
+  if (!user) {
     console.log("user not found");
-  } else if(!user.exitdate) {
+  } else if (!user.exitdate) {
     const exitedUser = await prisma.chat_participant.update({
       where: {
         chatid: chatID,
-        nickname: nickName
+        nickname: nickName,
       },
       data: {
-        exitdate: exitDate
-      } 
-    })
+        exitdate: exitDate,
+      },
+    });
     return exitedUser;
-  }else {
+  } else {
     console.log("user already exited");
     return user;
   }
@@ -200,20 +198,18 @@ export async function exitChatParticipant(
 export async function updateDiscussionTitle(
   prisma: PrismaClient,
   newTitle: string,
-  discussionID: number 
+  discussionID: number
 ) {
   const discussion = await prisma.discussion.update({
     where: {
-        discussionid: discussionID
+      discussionid: discussionID,
     },
     data: {
       title: newTitle,
-    }
+    },
   });
   console.log(discussion);
 }
-
-
 
 //BAND UPDATES
 
@@ -225,26 +221,26 @@ export async function exitBand(
 ) {
   await prisma.band_member.update({
     where: {
-      nickname_bandname: {nickname: nickName, bandname: bandName},
+      nickname_bandname: { nickname: nickName, bandname: bandName },
     },
     data: {
-      exittimestamp: exitDate
-    }
+      exittimestamp: exitDate,
+    },
   });
 }
 
 export async function changeAlbumName(
   prisma: PrismaClient,
   albumID: number,
-  newName: string,
+  newName: string
 ) {
   const album = await prisma.album.update({
     where: {
       albumid: albumID,
     },
     data: {
-      albumname: newName
-    }
+      albumname: newName,
+    },
   });
   return album;
 }
@@ -256,26 +252,26 @@ export async function addSongToAlbum(
 ) {
   const song = await prisma.song.findUnique({
     where: {
-      songid: songID
-    }
+      songid: songID,
+    },
   });
 
-  if(!song) {
+  if (!song) {
     console.log("song not exist");
-    return 
+    return;
   }
 
   const album = await prisma.album.update({
     where: {
-      albumid: albumID
+      albumid: albumID,
     },
     data: {
       song: {
         connect: {
-          songid: song?.songid
-        }
-      }
-    }
+          songid: song?.songid,
+        },
+      },
+    },
   });
 
   return album;
@@ -289,12 +285,12 @@ export async function addSongGenre(
   const genre = await prisma.genre.findUnique({
     where: {
       genrename: genreName,
-    }
+    },
   });
 
-  if(!genre) {
+  if (!genre) {
     console.log("genre not found");
-    return ;
+    return;
   }
 
   const song = await prisma.song.update({
@@ -304,10 +300,10 @@ export async function addSongGenre(
     data: {
       appartainance: {
         connect: {
-          genrename: genreName
-        }
-      }
-    }
+          genrename: genreName,
+        },
+      },
+    },
   });
   return song;
 }

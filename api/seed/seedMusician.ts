@@ -1,5 +1,6 @@
 import { PrismaClient } from '@prisma/client';
 import { userCreation } from '../queries/dbCreate';
+import { getAllArtists } from '../queries/dbRead';
 
 export async function seedMusicians(prisma: PrismaClient) {
     await userCreation(

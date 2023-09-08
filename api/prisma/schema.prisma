@@ -67,6 +67,7 @@ model discussion {
   title               String           @db.VarChar(16)
   average             Int
   nickname            String           @db.VarChar(16)
+  discussiontext      String           @db.VarChar(256)
   comment             comment[]
   musician            artist           @relation(fields: [nickname], references: [nickname], onDelete: Cascade, onUpdate: NoAction)
   post_reference      post_reference[]

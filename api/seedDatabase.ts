@@ -2,6 +2,7 @@ import { PrismaClient } from '@prisma/client';
 import { seedGenre, seedFollowedGenres, seedInfluencingGenres } from './seed/seedGenre'
 import { seedMusicians } from './seed/seedMusician';
 import { seedHashtags } from './seed/seedHashtag';
+import { getAllArtists } from './queries/dbRead';
 
 const prisma = new PrismaClient();
 
@@ -18,6 +19,7 @@ async function seedUsersGenres() {
 
 }
 
+
 seedUsersGenres().then(() => {
     seedFollowedGenres(prisma)
         .catch(e => {
@@ -28,6 +30,8 @@ seedUsersGenres().then(() => {
         .catch(e => {
             console.log(e.message);
         })
+    
+    getAllArtists(prisma);
 
 });
 

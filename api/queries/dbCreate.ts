@@ -41,8 +41,8 @@ export async function createGenre(
     data: {
       genrename: genreName,
       genredescription: genreDescription,
-      origin: origin
-    }
+      origin: origin,
+    },
   });
   console.log(genre);
 }
@@ -101,15 +101,12 @@ export async function followGenre(
   }
 }
 
-export async function createHashTag(
-  prisma: PrismaClient,
-  hashtagName: string,
-) {
+export async function createHashTag(prisma: PrismaClient, hashtagName: string) {
   const tag = await prisma.hashtag.create({
     data: {
-      hashtagname: hashtagName
-    }
-  })
+      hashtagname: hashtagName,
+    },
+  });
   return tag;
 }
 
@@ -168,14 +165,11 @@ export async function createInfluenceGenre(
 }
 
 // CHAT CREATIONS
-export async function createChat(
-  prisma: PrismaClient,
-  chatName: string,
-) {
+export async function createChat(prisma: PrismaClient, chatName: string) {
   const chat = await prisma.chat.create({
     data: {
-      chatname: chatName
-    }
+      chatname: chatName,
+    },
   });
   return chat;
 }
@@ -185,7 +179,7 @@ export async function createMessage(
   chatTargetID: number,
   nickName: string,
   messageText: string,
-  timeStamp: Date 
+  timeStamp: Date
 ) {
   try {
     const newMessage = await prisma.message.create({
@@ -193,25 +187,25 @@ export async function createMessage(
         chatid: chatTargetID,
         nickname: nickName,
         messagetext: messageText,
-        timestampmessage: timeStamp
-      }
+        timestampmessage: timeStamp,
+      },
     });
     const participant = await prisma.chat_participant.update({
       where: {
         chatid: chatTargetID,
-        nickname: nickName
+        nickname: nickName,
       },
       data: {
         message: {
           connect: {
-            messageid: newMessage.messageid 
-          }
-        }
-      }
+            messageid: newMessage.messageid,
+          },
+        },
+      },
     });
     return participant;
   } catch (error) {
-    console.error('something went wrong', error);
+    console.error("something went wrong", error);
   }
 }
 
@@ -225,12 +219,10 @@ export async function addChatParticipant(
     data: {
       nickname: nickName,
       entrydate: entry,
-      chatid: chatID
-    }
+      chatid: chatID,
+    },
   });
-
 }
-
 
 // POSTS CREATIONS
 
@@ -239,7 +231,8 @@ export async function createDiscussion(
   timeStamp: Date,
   title: string,
   average: number,
-  nickname: string
+  nickname: string,
+  description: string
 ) {
   const discussion = await prisma.discussion.create({
     data: {
@@ -247,6 +240,7 @@ export async function createDiscussion(
       title: title,
       average: average,
       nickname: nickname,
+      discussiontext: description,
     },
   });
 
@@ -298,47 +292,47 @@ export async function createComment(
 }
 
 export async function createReaction(
-  prisma: PrismaClient, 
+  prisma: PrismaClient,
   nickName: string,
   discussionID: number,
   vote: boolean,
   timeStamp: Date
-  ) { 
-    const reactionVal = await prisma.reaction.create({
-      data: {
-        nickname: nickName,
-        discussionid: discussionID,
-        vote: vote,
-        dateandtime: timeStamp
-      }
-    });
+) {
+  const reactionVal = await prisma.reaction.create({
+    data: {
+      nickname: nickName,
+      discussionid: discussionID,
+      vote: vote,
+      dateandtime: timeStamp,
+    },
+  });
 
-    const discussion = await prisma.discussion.update({
-      where: {
-        discussionid: discussionID,
+  const discussion = await prisma.discussion.update({
+    where: {
+      discussionid: discussionID,
+    },
+    data: {
+      reaction: {
+        connect: {
+          nickname_discussionid: reactionVal,
+        },
       },
-      data: {
-        reaction: {
-          connect: {
-            nickname_discussionid: reactionVal
-          }
-        }
-      }
-    });
+    },
+  });
 
-    const user = await prisma.artist.update({
-      where: {
-        nickname: nickName
+  const user = await prisma.artist.update({
+    where: {
+      nickname: nickName,
+    },
+    data: {
+      reaction: {
+        connect: {
+          nickname_discussionid: reactionVal,
+        },
       },
-      data: {
-        reaction: {
-          connect: {
-            nickname_discussionid: reactionVal
-          }
-        }
-      }
-    });
-    return discussion;
+    },
+  });
+  return discussion;
 }
 
 export async function addHashtagToPost(
@@ -349,55 +343,53 @@ export async function addHashtagToPost(
   const tag = await prisma.post_reference.create({
     data: {
       discussionid: discussionID,
-      hashtagname: hashtag
-    }
+      hashtagname: hashtag,
+    },
   });
-  
+
   await prisma.discussion.update({
     where: {
-      discussionid: discussionID
+      discussionid: discussionID,
     },
     data: {
       post_reference: {
         connect: {
-          discussionid_hashtagname: tag
-        }
-      }
-    }
+          discussionid_hashtagname: tag,
+        },
+      },
+    },
   });
 
   const hashtags = await prisma.hashtag.update({
     where: {
-      hashtagname: hashtag
+      hashtagname: hashtag,
     },
     data: {
       post_reference: {
         connect: {
-          discussionid_hashtagname: tag
-        }
-      }
-    }
+          discussionid_hashtagname: tag,
+        },
+      },
+    },
   });
   return hashtags;
 }
-
 
 //band part
 
 export async function createBand(
   prisma: PrismaClient,
   bandName: string,
-  foundationDate: Date 
-){
+  foundationDate: Date
+) {
   const band = await prisma.band.create({
     data: {
       bandname: bandName,
-      foundationdate: foundationDate
-    }
+      foundationdate: foundationDate,
+    },
   });
   return band;
 }
-
 
 export async function createBandMember(
   prisma: PrismaClient,
@@ -409,21 +401,21 @@ export async function createBandMember(
     data: {
       nickname: nickName,
       bandname: bandName,
-      entrytimestamp: entryTime
-    }
+      entrytimestamp: entryTime,
+    },
   });
 
   const band = await prisma.band.update({
     where: {
-      bandname: bandName
+      bandname: bandName,
     },
     data: {
       band_member: {
         connect: {
           nickname_bandname: bandMember,
-        }
-      }
-    }
+        },
+      },
+    },
   });
 
   await prisma.artist.update({
@@ -434,13 +426,13 @@ export async function createBandMember(
       band_member: {
         connect: {
           nickname_bandname: bandMember,
-        }
-      }
-    }
+        },
+      },
+    },
   });
 
   return band;
-};
+}
 
 export async function createSongByBand(
   prisma: PrismaClient,
@@ -458,8 +450,8 @@ export async function createSongByBand(
       duration: duration,
       albumid: albumID,
       bandname: bandName,
-      releasedate: publicationDate
-    }
+      releasedate: publicationDate,
+    },
   });
 
   const band = await prisma.band.update({
@@ -469,10 +461,10 @@ export async function createSongByBand(
     data: {
       song: {
         connect: {
-          songid: song.songid
-        }
-      }
-    }
+          songid: song.songid,
+        },
+      },
+    },
   });
 
   return band;
@@ -492,21 +484,21 @@ export async function createSongByArtist(
       songname: songName,
       duration: duration,
       nickname: nickName,
-      releasedate: publicationDate
-    }
+      releasedate: publicationDate,
+    },
   });
 
   const artist = await prisma.artist.update({
     where: {
-      nickname: nickName
+      nickname: nickName,
     },
     data: {
       song: {
         connect: {
-          songid: song.songid
-        }
-      }
-    }
+          songid: song.songid,
+        },
+      },
+    },
   });
 
   return artist;
@@ -522,8 +514,8 @@ export async function createAlbumByBand(
     data: {
       albumname: albumName,
       releasedate: realeseDate,
-      bandname: bandName
-    }
+      bandname: bandName,
+    },
   });
 
   const band = await prisma.band.update({
@@ -533,10 +525,10 @@ export async function createAlbumByBand(
     data: {
       album: {
         connect: {
-          albumid: album.albumid 
-        }
-      }
-    }
+          albumid: album.albumid,
+        },
+      },
+    },
   });
 
   return band;
@@ -552,21 +544,21 @@ export async function createAlbumByArtist(
     data: {
       albumname: albumName,
       releasedate: realeseDate,
-      nickname: nickName
-    }
+      nickname: nickName,
+    },
   });
 
   const artist = await prisma.artist.update({
     where: {
-      nickname: nickName
+      nickname: nickName,
     },
     data: {
       album: {
         connect: {
-          albumid: album.albumid 
-        }
-      }
-    }
+          albumid: album.albumid,
+        },
+      },
+    },
   });
   return artist;
 }
