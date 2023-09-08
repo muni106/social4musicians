@@ -1,5 +1,5 @@
 import { PrismaClient } from '@prisma/client';
-import { createGenre } from '../queries/dbCreate';
+import { createGenre, createInfluenceGenre, followGenre } from '../queries/dbCreate';
 
 export async function seedGenre(prisma: PrismaClient) {
     await createGenre(
@@ -78,4 +78,70 @@ export async function seedGenre(prisma: PrismaClient) {
         'United States',
         'A genre of music that originated in African American communities in the 1960s.'
       ); 
-  }
+}
+
+export async function seedFollowedGenres(prisma: PrismaClient) {
+  await followGenre(prisma, 'trumpetplayer2', 'Rock');
+  await followGenre(prisma, 'trumpetplayer2', 'Pop');
+  await followGenre(prisma, 'pianist1', 'Pop');
+  await followGenre(prisma, 'pianist1', 'Hip-Hop');
+  await followGenre(prisma, 'keyboardist2', 'Hip-Hop');
+  await followGenre(prisma, 'keyboardist2', 'Country');
+  await followGenre(prisma, 'keyboardist2', 'Jazz');
+  await followGenre(prisma, 'saxophonist1', 'Country');
+  await followGenre(prisma, 'violinist1', 'Jazz');
+  await followGenre(prisma, 'singer1', 'Electronic');
+  await followGenre(prisma, 'bassist1', 'Classical');
+  await followGenre(prisma, 'keyboardist1', 'R&B');
+  await followGenre(prisma, 'trumpetplayer1', 'Reggae');
+  await followGenre(prisma, 'flutist1', 'Metal'); 
+  await followGenre(prisma, 'flutist2', 'Rock');
+  await followGenre(prisma, 'pianist2', 'Pop');
+  await followGenre(prisma, 'drummer2', 'Hip-Hop');
+  await followGenre(prisma, 'saxophonist2', 'Country');
+  await followGenre(prisma, 'violinist2', 'Jazz');
+  await followGenre(prisma, 'singer2', 'Electronic');
+  await followGenre(prisma, 'bassist2', 'Classical');
+  await followGenre(prisma, 'keyboardist2', 'R&B');
+  await followGenre(prisma, 'trumpetplayer2', 'Reggae');
+  await followGenre(prisma, 'flutist2', 'Metal');
+  await followGenre(prisma, 'percussionist1', 'Rock');
+  await followGenre(prisma, 'violist1', 'Pop');
+  await followGenre(prisma, 'cellist1', 'Hip-Hop');
+  await followGenre(prisma, 'clarinetist1', 'Country');
+  await followGenre(prisma, 'sitarplayer1', 'Jazz');
+
+}
+
+export async function seedInfluencingGenres(prisma: PrismaClient) {
+  await createInfluenceGenre(prisma, 'trumpetplayer2', 'Rock');
+  await createInfluenceGenre(prisma, 'trumpetplayer2', 'Pop');
+  await createInfluenceGenre(prisma, 'pianist1', 'Pop');
+  await createInfluenceGenre(prisma, 'pianist1', 'Hip-Hop');
+  await createInfluenceGenre(prisma, 'keyboardist2', 'Hip-Hop');
+  await createInfluenceGenre(prisma, 'keyboardist2', 'Country');
+  await createInfluenceGenre(prisma, 'keyboardist2', 'Jazz');
+  await createInfluenceGenre(prisma, 'saxophonist1', 'Country');
+  await createInfluenceGenre(prisma, 'violinist1', 'Jazz');
+  await createInfluenceGenre(prisma, 'singer1', 'Electronic');
+  await createInfluenceGenre(prisma, 'bassist1', 'Classical');
+  await createInfluenceGenre(prisma, 'keyboardist1', 'R&B');
+  await createInfluenceGenre(prisma, 'trumpetplayer1', 'Reggae');
+  await createInfluenceGenre(prisma, 'flutist1', 'Metal'); 
+  await createInfluenceGenre(prisma, 'flutist2', 'Rock');
+  await createInfluenceGenre(prisma, 'pianist2', 'Pop');
+  await createInfluenceGenre(prisma, 'drummer2', 'Hip-Hop');
+  await createInfluenceGenre(prisma, 'saxophonist2', 'Country');
+  await createInfluenceGenre(prisma, 'violinist2', 'Jazz');
+  await createInfluenceGenre(prisma, 'singer2', 'Electronic');
+  await createInfluenceGenre(prisma, 'bassist2', 'Classical');
+  await createInfluenceGenre(prisma, 'keyboardist2', 'R&B');
+  await createInfluenceGenre(prisma, 'trumpetplayer2', 'Reggae');
+  await createInfluenceGenre(prisma, 'flutist2', 'Metal');
+  await createInfluenceGenre(prisma, 'percussionist1', 'Rock');
+  await createInfluenceGenre(prisma, 'violist1', 'Pop');
+  await createInfluenceGenre(prisma, 'cellist1', 'Hip-Hop');
+  await createInfluenceGenre(prisma, 'clarinetist1', 'Country');
+  await createInfluenceGenre(prisma, 'sitarplayer1', 'Jazz');
+  
+}

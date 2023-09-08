@@ -14,7 +14,7 @@ export async function userCreation(
   isCertified: boolean,
   isMaster: boolean
 ) {
-  const user = await prisma.musician.create({
+  const user = await prisma.artist.create({
     data: {
       nickname: nickname,
       firstname: firstName,
@@ -53,13 +53,13 @@ export async function followGenre(
   genreName: string
 ) {
   try {
-    //verify musician existence
-    const musician = await prisma.musician.findUnique({
+    //verify artist existence
+    const artist = await prisma.artist.findUnique({
       where: { nickname: nickName }, // Replace 1 with the actual ID of the EntityA
       include: { follow: true }, // Include the existing EntityBs related to EntityA
     });
-    if (!musician) {
-      console.error("musician not found");
+    if (!artist) {
+      console.error("artist not found");
       return;
     }
 
@@ -82,7 +82,7 @@ export async function followGenre(
     });
 
     // Step 3: Add the new EntityB to the collection of EntityBs related to EntityA
-    const updatedUser = await prisma.musician.update({
+    const updatedUser = await prisma.artist.update({
       where: { nickname: nickName },
       data: {
         follow: {
@@ -110,22 +110,22 @@ export async function createHashTag(
       hashtagname: hashtagName
     }
   })
-  return hashtagName;
+  return tag;
 }
 
-export async function addInfluenceGenre(
+export async function createInfluenceGenre(
   prisma: PrismaClient,
   nickName: string,
   genreName: string
 ) {
   try {
-    //verify musician existence
-    const musician = await prisma.musician.findUnique({
+    //verify artist existence
+    const artist = await prisma.artist.findUnique({
       where: { nickname: nickName }, // Replace 1 with the actual ID of the EntityA
       include: { follow: true }, // Include the existing EntityBs related to EntityA
     });
-    if (!musician) {
-      console.error("musician not found");
+    if (!artist) {
+      console.error("artist not found influence");
       return;
     }
 
@@ -148,7 +148,7 @@ export async function addInfluenceGenre(
     });
 
     // Step 3: Add the new EntityB to the collection of EntityBs related to EntityA
-    const updatedUser = await prisma.musician.update({
+    const updatedUser = await prisma.artist.update({
       where: { nickname: nickName },
       data: {
         follow: {
@@ -250,7 +250,7 @@ export async function createDiscussion(
     },
   });
 
-  const user = await prisma.musician.update({
+  const user = await prisma.artist.update({
     where: {
       nickname: nickname,
     },
@@ -282,7 +282,7 @@ export async function createComment(
     },
   });
 
-  const userComment = await prisma.musician.update({
+  const userComment = await prisma.artist.update({
     where: {
       nickname: sender,
     },
@@ -326,7 +326,7 @@ export async function createReaction(
       }
     });
 
-    const user = await prisma.musician.update({
+    const user = await prisma.artist.update({
       where: {
         nickname: nickName
       },
@@ -378,7 +378,7 @@ export async function addHashtagToPost(
       }
     }
   });
-  return hashtag;
+  return hashtags;
 }
 
 
@@ -426,7 +426,7 @@ export async function createBandMember(
     }
   });
 
-  await prisma.musician.update({
+  await prisma.artist.update({
     where: {
       nickname: nickName,
     },
@@ -456,15 +456,9 @@ export async function createSongByBand(
       musictrack: musickTrack,
       songname: songName,
       duration: duration,
-      albumid: albumID
-    }
-  });
-
-  const writing = await prisma.writing.create({
-    data: {
+      albumid: albumID,
       bandname: bandName,
-      songid: song.songid,
-      publicationdate: publicationDate
+      releasedate: publicationDate
     }
   });
 
@@ -473,7 +467,7 @@ export async function createSongByBand(
       bandname: bandName,
     },
     data: {
-      writing: {
+      song: {
         connect: {
           songid: song.songid
         }
@@ -484,12 +478,11 @@ export async function createSongByBand(
   return band;
 }
 
-export async function createSongByMusician(
+export async function createSongByArtist(
   prisma: PrismaClient,
   musickTrack: number,
   songName: string,
   duration: number,
-  albumID: number,
   nickName: string,
   publicationDate: string
 ) {
@@ -498,24 +491,17 @@ export async function createSongByMusician(
       musictrack: musickTrack,
       songname: songName,
       duration: duration,
-      albumid: albumID
-    }
-  });
-
-  const writing = await prisma.writing.create({
-    data: {
       nickname: nickName,
-      songid: song.songid,
-      publicationdate: publicationDate
+      releasedate: publicationDate
     }
   });
 
-  const musician = await prisma.musician.update({
+  const artist = await prisma.artist.update({
     where: {
       nickname: nickName
     },
     data: {
-      writing: {
+      song: {
         connect: {
           songid: song.songid
         }
@@ -523,7 +509,7 @@ export async function createSongByMusician(
     }
   });
 
-  return musician;
+  return artist;
 }
 
 export async function createAlbumByBand(
@@ -535,14 +521,8 @@ export async function createAlbumByBand(
   const album = await prisma.album.create({
     data: {
       albumname: albumName,
-      realesedate: realeseDate
-    }
-  });
-
-  const release = await prisma.release.create({
-    data: {
-      bandname: bandName,
-      albumid: album.albumid,
+      releasedate: realeseDate,
+      bandname: bandName
     }
   });
 
@@ -551,17 +531,18 @@ export async function createAlbumByBand(
       bandname: bandName,
     },
     data: {
-      release: {
+      album: {
         connect: {
           albumid: album.albumid 
         }
       }
     }
   });
-  return release;
+
+  return band;
 }
 
-export async function createAlbumByAlbum(
+export async function createAlbumByArtist(
   prisma: PrismaClient,
   albumName: string,
   realeseDate: Date,
@@ -570,28 +551,22 @@ export async function createAlbumByAlbum(
   const album = await prisma.album.create({
     data: {
       albumname: albumName,
-      realesedate: realeseDate
+      releasedate: realeseDate,
+      nickname: nickName
     }
   });
 
-  const release = await prisma.release.create({
-    data: {
-      nickname: nickName,
-      albumid: album.albumid,
-    }
-  });
-
-  const musician = await prisma.musician.update({
+  const artist = await prisma.artist.update({
     where: {
       nickname: nickName
     },
     data: {
-      release: {
+      album: {
         connect: {
           albumid: album.albumid 
         }
       }
     }
   });
-  return release;
+  return artist;
 }
