@@ -1,7 +1,7 @@
 import { PrismaClient } from '@prisma/client';
 import { seedGenre, seedFollowedGenres, seedInfluencingGenres } from './seed/seedGenre'
 import { seedMusicians } from './seed/seedMusician';
-import { seedHashtags } from './seed/seedHashtag';
+import { seedHashtags } from './seed/seedPosts';
 import { getAllArtists } from './queries/dbRead';
 
 const prisma = new PrismaClient();
@@ -39,6 +39,7 @@ seedHashtags(prisma)
     .catch(e => {
         console.log(e.message);
     })
+
 prisma.$disconnect();
 
 

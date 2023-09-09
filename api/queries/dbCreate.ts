@@ -1,4 +1,4 @@
-import { Prisma, PrismaClient } from "@prisma/client";
+import { PrismaClient } from "@prisma/client";
 
 // USER SECTION
 export async function userCreation(
@@ -122,7 +122,7 @@ export async function createInfluenceGenre(
       include: { follow: true }, // Include the existing EntityBs related to EntityA
     });
     if (!artist) {
-      console.error("artist not found influence");
+      console.error("artist not found influence ", nickName);
       return;
     }
 
@@ -133,7 +133,7 @@ export async function createInfluenceGenre(
       },
     });
     if (!existingGenre) {
-      console.error("genre not found");
+      console.error("genre not found ", genreName);
       return;
     }
 
@@ -222,6 +222,7 @@ export async function addChatParticipant(
       chatid: chatID,
     },
   });
+  return participant;
 }
 
 // POSTS CREATIONS
@@ -439,16 +440,14 @@ export async function createSongByBand(
   musickTrack: number,
   songName: string,
   duration: number,
-  albumID: number,
   bandName: string,
-  publicationDate: string
+  publicationDate: Date 
 ) {
   const song = await prisma.song.create({
     data: {
       musictrack: musickTrack,
       songname: songName,
       duration: duration,
-      albumid: albumID,
       bandname: bandName,
       releasedate: publicationDate,
     },
@@ -476,7 +475,7 @@ export async function createSongByArtist(
   songName: string,
   duration: number,
   nickName: string,
-  publicationDate: string
+  publicationDate: Date 
 ) {
   const song = await prisma.song.create({
     data: {
@@ -531,7 +530,7 @@ export async function createAlbumByBand(
     },
   });
 
-  return band;
+  return album;
 }
 
 export async function createAlbumByArtist(
@@ -560,5 +559,5 @@ export async function createAlbumByArtist(
       },
     },
   });
-  return artist;
+  return album;
 }
