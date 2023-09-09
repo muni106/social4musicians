@@ -28,7 +28,6 @@ export async function userCreation(
       pass: password,
     },
   });
-  console.log(user);
 }
 
 export async function createGenre(
@@ -44,7 +43,6 @@ export async function createGenre(
       origin: origin,
     },
   });
-  console.log(genre);
 }
 
 export async function followGenre(
@@ -55,7 +53,8 @@ export async function followGenre(
   try {
     //verify artist existence
     const artist = await prisma.artist.findUnique({
-      where: { nickname: nickName }, // Replace 1 with the actual ID of the EntityA
+      where: { 
+        nickname: nickName }, // Replace 1 with the actual ID of the EntityA
       include: { follow: true }, // Include the existing EntityBs related to EntityA
     });
     if (!artist) {
@@ -95,7 +94,6 @@ export async function followGenre(
       },
     });
 
-    console.log("EntityB added to EntityA:", updatedUser);
   } catch (error) {
     console.error("Error adding EntityB to EntityA:", error);
   }
@@ -146,7 +144,7 @@ export async function createInfluenceGenre(
 
     // Step 3: Add the new EntityB to the collection of EntityBs related to EntityA
     const updatedUser = await prisma.artist.update({
-      where: { nickname: nickName },
+      where: { nickname: artist.nickname },
       data: {
         follow: {
           connect: [
@@ -156,11 +154,13 @@ export async function createInfluenceGenre(
           ],
         },
       },
+      include: {
+        follow: true,
+      }
     });
 
-    console.log("EntityB added to EntityA:", updatedUser);
   } catch (error) {
-    console.error("Error adding EntityB to EntityA:", error);
+    console.log("error in create influence genre", error);
   }
 }
 
@@ -192,8 +192,7 @@ export async function createMessage(
     });
     const participant = await prisma.chat_participant.update({
       where: {
-        chatid: chatTargetID,
-        nickname: nickName,
+        chatid_nickname: {chatid: chatTargetID, nickname: nickName},
       },
       data: {
         message: {
@@ -296,14 +295,14 @@ export async function createReaction(
   prisma: PrismaClient,
   nickName: string,
   discussionID: number,
-  vote: boolean,
+  votee: boolean,
   timeStamp: Date
 ) {
   const reactionVal = await prisma.reaction.create({
     data: {
       nickname: nickName,
       discussionid: discussionID,
-      vote: vote,
+      vote: votee,
       dateandtime: timeStamp,
     },
   });
@@ -315,7 +314,7 @@ export async function createReaction(
     data: {
       reaction: {
         connect: {
-          nickname_discussionid: reactionVal,
+          nickname_discussionid: {nickname: nickName, discussionid: discussionID},
         },
       },
     },
@@ -328,7 +327,7 @@ export async function createReaction(
     data: {
       reaction: {
         connect: {
-          nickname_discussionid: reactionVal,
+          nickname_discussionid: {nickname: nickName, discussionid: discussionID},
         },
       },
     },

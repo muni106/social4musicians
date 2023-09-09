@@ -171,8 +171,7 @@ export async function exitChatParticipant(
 ) {
   const user = await prisma.chat_participant.findUnique({
     where: {
-      chatid: chatID,
-      nickname: nickName,
+      chatid_nickname: {chatid: chatID, nickname: nickName},
     },
   });
   if (!user) {
@@ -180,8 +179,7 @@ export async function exitChatParticipant(
   } else if (!user.exitdate) {
     const exitedUser = await prisma.chat_participant.update({
       where: {
-        chatid: chatID,
-        nickname: nickName,
+        chatid_nickname: {chatid: chatID, nickname: nickName},
       },
       data: {
         exitdate: exitDate,
@@ -208,7 +206,6 @@ export async function updateDiscussionTitle(
       title: newTitle,
     },
   });
-  console.log(discussion);
 }
 
 //BAND UPDATES

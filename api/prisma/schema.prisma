@@ -35,7 +35,7 @@ model band {
 
 model chat {
   chatid           Int                @id @default(autoincrement())
-  chatname         String             @db.VarChar(10)
+  chatname         String             @db.VarChar(32)
   chat_participant chat_participant[]
 }
 
@@ -43,7 +43,7 @@ model chat_participant {
   chatid    Int
   entrydate DateTime  @db.Date
   exitdate  DateTime? @db.Date
-  nickname  String    @unique @db.VarChar(16)
+  nickname  String    @db.VarChar(16)
   chat      chat      @relation(fields: [chatid], references: [chatid], onDelete: Cascade, onUpdate: NoAction)
   musician  artist    @relation(fields: [nickname], references: [nickname], onDelete: Cascade, onUpdate: NoAction)
   message   message[]
@@ -53,7 +53,7 @@ model chat_participant {
 
 model comment {
   commentid        Int        @id @default(autoincrement())
-  commenttext      String     @db.VarChar(32)
+  commenttext      String     @db.VarChar(64)
   timestampcomment DateTime   @db.Timestamp(6)
   nickname         String     @db.VarChar(16)
   discussionid     Int
@@ -64,10 +64,10 @@ model comment {
 model discussion {
   discussionid        Int              @id @default(autoincrement())
   timestampdiscussion DateTime         @db.Timestamp(6)
-  title               String           @db.VarChar(16)
+  title               String           @db.VarChar(64)
   average             Int
   nickname            String           @db.VarChar(16)
-  discussiontext      String           @db.VarChar(256)
+  discussiontext      String           @db.VarChar(400)
   comment             comment[]
   musician            artist           @relation(fields: [nickname], references: [nickname], onDelete: Cascade, onUpdate: NoAction)
   post_reference      post_reference[]
@@ -172,19 +172,19 @@ model band_member {
 }
 
 model artist {
-  nickname         String            @id @db.VarChar(16)
-  firstname        String            @db.VarChar(20)
-  lastname         String            @db.VarChar(20)
-  e_mail           String?           @unique @db.VarChar(100)
-  locality         String            @db.VarChar(16)
-  bestinstrument   String            @db.VarChar(16)
-  telephonenumber  String            @unique @db.VarChar(16)
+  nickname         String             @id @db.VarChar(16)
+  firstname        String             @db.VarChar(20)
+  lastname         String             @db.VarChar(20)
+  e_mail           String?            @unique @db.VarChar(100)
+  locality         String             @db.VarChar(16)
+  bestinstrument   String             @db.VarChar(16)
+  telephonenumber  String             @unique @db.VarChar(16)
   iscertified      Boolean
   ismaster         Boolean
-  pass             String            @db.VarChar(128)
+  pass             String             @db.VarChar(128)
   album            album[]
   band_member      band_member[]
-  chat_participant chat_participant?
+  chat_participant chat_participant[]
   comment          comment[]
   discussion       discussion[]
   follow           follow[]

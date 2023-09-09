@@ -1,44 +1,40 @@
 import { PrismaClient } from '@prisma/client';
 import { seedGenre, seedFollowedGenres, seedInfluencingGenres } from './seed/seedGenre'
 import { seedMusicians } from './seed/seedMusician';
-import { seedHashtags } from './seed/seedPosts';
+import { seedComments, seedDiscussions, seedHashtagFollows, seedHashtags, seedPostReferences, seedReactions } from './seed/seedPosts';
 import { getAllArtists } from './queries/dbRead';
+import { seedChatParticipant, seedChats, seedMessages } from './seed/seedChats';
 
 const prisma = new PrismaClient();
 
 async function seedUsersGenres() {
-    await seedMusicians(prisma)
-        .catch(e => {
-            console.log(e.message);
-        })
-
-    await seedGenre(prisma)
-        .catch(e => {
-            console.log(e.message);
-        })
-
+    await seedMusicians(prisma);
+    await seedGenre(prisma);
+    await seedHashtags(prisma),
+    await seedChats(prisma);
+    
 }
 
+async function secondWaveSeed() {
+    await seedChatParticipant(prisma);
+    await seedDiscussions(prisma);
+}
 
-seedUsersGenres().then(() => {
-    seedFollowedGenres(prisma)
-        .catch(e => {
-            console.log(e.message);
-        })
-
-    seedInfluencingGenres(prisma)
-        .catch(e => {
-            console.log(e.message);
-        })
-    
-    getAllArtists(prisma);
-
+seedUsersGenres()
+.then(() => 
+    secondWaveSeed()
+).then(() => {
+    seedFollowedGenres(prisma);
+    seedInfluencingGenres(prisma);
+    seedMessages(prisma);
+    seedComments(prisma);
+    seedReactions(prisma);
+    seedPostReferences(prisma);
+    seedHashtagFollows(prisma)
 });
 
-seedHashtags(prisma)
-    .catch(e => {
-        console.log(e.message);
-    })
+
+
 
 prisma.$disconnect();
 
