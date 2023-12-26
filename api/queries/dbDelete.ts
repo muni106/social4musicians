@@ -116,8 +116,7 @@ export async function deleteChatParticipant(
 ) {
   await prisma.chat_participant.delete({
     where: {
-      nickname: nickName,
-      chatid: chatID,
+      chatid_nickname: {chatid: chatID, nickname: nickName},
     },
   });
 }

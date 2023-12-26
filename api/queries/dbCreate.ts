@@ -93,7 +93,7 @@ export async function followGenre(
         },
       },
     });
-
+    return updatedUser;
   } catch (error) {
     console.error("Error adding EntityB to EntityA:", error);
   }

@@ -35,15 +35,16 @@ CREATE TABLE FOLLOW(
 CREATE TABLE DISCUSSION(
     discussionID SERIAL UNIQUE,
     timestampDiscussion TIMESTAMP NOT NULL,
-    title VARCHAR(16) NOT NULL,
+    title VARCHAR(64) NOT NULL,
     average INT NOT NULL,
     nickname VARCHAR(16) NOT NULL,
+    discussionText VARCHAR(400) NOT NULL,
     PRIMARY KEY (discussionID)
 );
 
 CREATE TABLE COMMENT(
     commentID SERIAL UNIQUE,
-    commentText VARCHAR(32) NOT NULL,
+    commentText VARCHAR(64) NOT NULL,
     timestampComment TIMESTAMP NOT NULL,
     nickname VARCHAR(16) NOT NULL,
     discussionID INT NOT NULL, 
@@ -74,13 +75,13 @@ CREATE TABLE CHAT_PARTICIPANT(
     chatID INT NOT NULL,
     entryDate Date NOT NULL,
     exitDate Date,
-    nickname VARCHAR(16) UNIQUE NOT NULL, 
+    nickname VARCHAR(16) NOT NULL, 
     PRIMARY KEY(chatID, nickname)
 );
 
 CREATE TABLE CHAT(
     chatID SERIAL UNIQUE,
-    chatName VARCHAR(10) NOT NULL,
+    chatName VARCHAR(32) NOT NULL,
     PRIMARY KEY(chatID)
 );
 
