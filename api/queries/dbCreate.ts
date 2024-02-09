@@ -438,7 +438,7 @@ export async function createSongByBand(
   prisma: PrismaClient,
   musickTrack: number,
   songName: string,
-  duration: number,
+  Duration: number,
   bandName: string,
   publicationDate: Date 
 ) {
@@ -446,7 +446,7 @@ export async function createSongByBand(
     data: {
       musictrack: musickTrack,
       songname: songName,
-      duration: duration,
+      duration: Duration,
       bandname: bandName,
       releasedate: publicationDate,
     },

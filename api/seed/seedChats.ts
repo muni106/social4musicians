@@ -57,8 +57,9 @@ export async function seedMessages(prisma: PrismaClient) {
       console.log("no artist found");
       return;
     }
+
     artist.forEach((x) => {
-      createMessage(prisma, x!.chatid, x!.nickname, "ciao", new Date());
+      createMessage(prisma, x.chatid, x.nickname, "ciao", new Date());
     });
   } catch (error) {
     console.log("error on seedMessages: ", error);
