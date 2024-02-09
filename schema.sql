@@ -95,7 +95,7 @@ CREATE TABLE MESSAGE(
 );
 
 CREATE TABLE BAND(
-    bandName VARCHAR(10) UNIQUE NOT NULL,
+    bandName VARCHAR(24) UNIQUE NOT NULL,
     foundationDate DATE NOT NULL,
     PRIMARY KEY(bandName)
 );
@@ -104,7 +104,7 @@ CREATE TABLE ALBUM(
     albumID SERIAL UNIQUE,
     albumName VARCHAR(10) NOT NULL,
     releaseDate DATE NOT NULL,
-    bandName VARCHAR(10),
+    bandName VARCHAR(24),
     nickName VARCHAR(16),
     PRIMARY KEY(albumID)
 );
@@ -116,7 +116,7 @@ CREATE TABLE SONG(
     duration INT NOT NULL,
     albumID INT, 
     releaseDate DATE NOT NULL,
-    bandName VARCHAR(10),
+    bandName VARCHAR(24),
     nickName VARCHAR(16),
     PRIMARY KEY(songID)
 );
@@ -135,7 +135,7 @@ CREATE TABLE OBSERVATION(
 
 CREATE TABLE BAND_MEMBER(
     nickname VARCHAR(16) NOT NULL,
-    bandName VARCHAR(10) NOT NULL,
+    bandName VARCHAR(24) NOT NULL,
     entryTimeStamp TIMESTAMP NOT NULL,
     exitTimeStamp TIMESTAMP,
     PRIMARY KEY(nickname, bandName)
