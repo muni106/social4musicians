@@ -1,0 +1,21 @@
+.LandingBody{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    padding: 10vw;
+}
+
+#logoLandingPage{
+    width: 45%;
+    margin-right: 5vw;
+}
+
+main {
+    width: 45%;
+}
+
+.button {
+    background-color: #157f57;
+    width: 8vw;
+}

@@ -1,27 +1,24 @@
-
 import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import logo from '../assets/images/logo-db.png';
+import '../assets/css/landing.css';
 
-function App() {
+function LandingPage() {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div className="LandingBody">
+      <img src={logo} id="logoLandingPage" alt="logo" />
+      <main>
+        <h1>Welcome to 4Musician</h1>
+        <section>
+          <h2>Join us</h2>
+          <a href="#" className="button">Subscribe</a>
+        </section>
+        <section>
+          <h2>welcome back</h2>
+          <a href="#" className="button">Login</a>
+        </section>
+      </main>
     </div>
   );
 }
 
-export default App;
+export default LandingPage;
