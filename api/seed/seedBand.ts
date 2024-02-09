@@ -34,7 +34,7 @@ export async function seedBands(prisma: PrismaClient) {
   }
 }
 
-export async function seedBandMenbers(prisma: PrismaClient) {
+export async function seedBandMembers(prisma: PrismaClient) {
   try {
     const artists = await getAllArtists(prisma);
     const bands = await getAllBands(prisma);

@@ -11,7 +11,7 @@ model album {
   albumid     Int      @id @default(autoincrement())
   albumname   String   @db.VarChar(10)
   releasedate DateTime @db.Date
-  bandname    String?  @db.VarChar(10)
+  bandname    String?  @db.VarChar(24)
   nickname    String?  @db.VarChar(16)
   band        band?    @relation(fields: [bandname], references: [bandname], onDelete: Cascade, onUpdate: NoAction)
   artist      artist?  @relation(fields: [nickname], references: [nickname], onDelete: Cascade, onUpdate: NoAction)
@@ -26,7 +26,7 @@ model appartainance {
 }
 
 model band {
-  bandname       String        @id @db.VarChar(10)
+  bandname       String        @id @db.VarChar(24)
   foundationdate DateTime      @db.Date
   album          album[]
   band_member    band_member[]
@@ -143,7 +143,7 @@ model song {
   duration      Int
   albumid       Int?
   releasedate   DateTime        @db.Date
-  bandname      String?         @db.VarChar(10)
+  bandname      String?         @db.VarChar(24)
   nickname      String?         @db.VarChar(16)
   appartainance appartainance[]
   album         album?          @relation(fields: [albumid], references: [albumid], onDelete: Cascade, onUpdate: NoAction)
@@ -162,7 +162,7 @@ model observation {
 
 model band_member {
   nickname       String    @db.VarChar(16)
-  bandname       String    @db.VarChar(10)
+  bandname       String    @db.VarChar(24)
   entrytimestamp DateTime  @db.Timestamp(6)
   exittimestamp  DateTime? @db.Timestamp(6)
   band           band      @relation(fields: [bandname], references: [bandname], onDelete: Cascade, onUpdate: NoAction)
