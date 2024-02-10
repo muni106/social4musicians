@@ -2,7 +2,7 @@ import React from 'react';
 import logo from '../assets/images/logo-db.png';
 import '../assets/css/landing.css';
 
-function LandingPage() {
+function Feed() {
   return (
     <div className="LandingBody">
       <img src={logo} id="logoLandingPage" alt="logo" />
@@ -21,4 +21,4 @@ function LandingPage() {
   );
 }
 
-export default LandingPage;
+export default Feed;
