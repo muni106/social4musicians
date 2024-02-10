@@ -1,0 +1,55 @@
+nav {
+    height: 3vw;
+    background-color: rgba(44,47,51, 0.8);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding-left: 1vw;
+    padding-right: 2vw;
+    border-bottom-style: solid;
+}
+
+#navLogo {
+    width: 2vw;
+    height: 2vw;
+}
+
+.logoNav a {
+    display: flex;
+    align-items: center;
+    text-decoration: none;
+}
+
+#searchBarContainer {
+    align-self: center;
+}
+
+#searchBar {
+    width: 20vw;
+    height: 2vw;
+    color: lightgray;
+    background-color: rgba(44,47,51, 0.8);
+    border-style: solid;
+    border-color: lightgray;
+    outline-color: #157f57;
+    border-radius: 25px;
+}
+
+#postHeader {
+    background-color: transparent; 
+    border-style: none;
+    font-size:larger;
+    border-radius: 25px;
+}
+
+
+#postHeader:hover {
+    background-color: rgba(153,170,181, 0.5);
+    cursor: pointer;
+    transition: 200ms;
+}
+
+#postHeader:active {
+    background-color: #157f57;
+    transition: 200ms;
+}
