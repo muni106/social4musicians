@@ -19,12 +19,8 @@ app.use(cookieParser());
 
 const PORT = process.env.PORT || 4000;
 
-app.get("/api/data", (req: Request, res: Response) => {
-  const responseData = { message: "Hello from the server! " };
-  res.json(responseData);
-});
+app.use('/api', router);
 
 app.listen(PORT, () => {
-  console.log("ciao");
   console.log(`Server is running on port: ${PORT}`);
 });

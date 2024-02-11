@@ -19,3 +19,9 @@ main {
     background-color: #157f57;
     width: 8vw;
 }
+
+#submitBtn {
+    background-color: #157f57;
+    border-color: lightgray;
+    color:lightgray;
+}
