@@ -4,8 +4,9 @@ import LandingPage from './pages/LandingPage';
 import SignIn from './pages/SignIn';
 import SignUp from './pages/SignUp';
 import Feed from './pages/feed';
+import Band from './pages/band';
 
-
+let nickname: string = "";
 function App() {
   return (
     <BrowserRouter>
@@ -14,6 +15,7 @@ function App() {
           <Route path='/signin' Component={SignIn} />
           <Route path='/signup' Component={SignUp} />
           <Route path='/feed' Component={Feed} />
+          <Route path='/band' Component={Band} />
         </Routes>
     </BrowserRouter>
   );

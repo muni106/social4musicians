@@ -7,7 +7,7 @@
 }
 
 #logoLandingPage{
-    width: 45%;
+    width: 35vw;
     margin-right: 5vw;
 }
 
@@ -20,8 +20,14 @@ main {
     width: 8vw;
 }
 
-#submitBtn {
+.btn {
     background-color: #157f57;
     border-color: lightgray;
+    color:lightgray;
+}
+
+.Button {
+    background-color: #157f57;
+    border-color: black;
     color:lightgray;
 }
