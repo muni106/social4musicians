@@ -2,7 +2,7 @@ CREATE TABLE ARTIST (
     nickname VARCHAR(16) UNIQUE NOT NULL,
     firstName VARCHAR(20) NOT NULL,
     lastName VARCHAR(20) NOT NULL, 
-    e_mail VARCHAR(100) UNIQUE,
+    e_mail VARCHAR(100) UNIQUE NOT NULL,
     locality VARCHAR(16) NOT NULL, 
     bestInstrument VARCHAR(16) NOT NULL,
     telephoneNumber VARCHAR(16) UNIQUE NOT NULL,

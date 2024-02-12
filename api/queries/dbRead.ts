@@ -1,4 +1,4 @@
-import { Prisma, PrismaClient } from "@prisma/client";
+import { Prisma, PrismaClient, artist } from "@prisma/client";
 
 // USER GETTERS
 export async function getAllArtists(
@@ -10,6 +10,17 @@ export async function getAllArtists(
     }
   });
   return allArtists;
+}
+
+export async function getAllNicknames(
+  prisma: PrismaClient,
+) {
+  const allArtists = await prisma.artist.findMany({
+    include: {
+      chat_participant: true
+    }
+  });
+  return allArtists.map(x => x.nickname);
 }
 
 export async function getAllGenres(prisma: PrismaClient) {
@@ -25,6 +36,18 @@ export async function getMusicianAccount(
   const musician = await prisma.artist.findUnique({
     where: {
       nickname: nickname,
+    },
+  });
+    return musician;
+}
+
+export async function getMusicianByEmail( 
+  prisma: PrismaClient,
+  email: string
+) {
+  const musician = await prisma.artist.findUnique({
+    where: {
+      e_mail: email,
     },
   });
   return musician;

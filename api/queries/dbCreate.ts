@@ -28,6 +28,7 @@ export async function userCreation(
       pass: password,
     },
   });
+  console.log(user);
 }
 
 export async function createGenre(

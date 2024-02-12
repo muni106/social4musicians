@@ -7,22 +7,28 @@ import UserProfile from '../helpers/userProfile';
 import { useState } from 'react';
 import { redirect, useNavigate } from 'react-router-dom';
 import { httpHelper } from '../helpers/httpHelper';
+import axios from 'axios';
 
+let ok;
 export default function SignIn() {
   const navigate = useNavigate();
-  const [e_mail, setEmail] = useState('');
-  const [pass, setPass] = useState('');
+  const [nickname, setNickname] = useState('');
 
   const handleSubmit = async (e: React.SyntheticEvent) => {
     e.preventDefault();
-    if( e_mail!== "" && pass !== "" ) {
-      console.log("submit")
-    }
-    return navigate('/');
+    axios.get(`http://localhost:4000/nicknames`)
+      .then((response) => {
+        console.log(response.data.includes('munssi'));
+        if (response.data.includes(nickname)) {
+          UserProfile.setName(nickname);
+          navigate('/feed');
+        }
+        else console.log('user not found')
+      })
+      .catch(err => console.log(err))
   }
-  const api = httpHelper();
-  
-  
+
+  //serve un controllo ma vaffanculo
 
   return (
     <div className="LandingBody">
@@ -31,13 +37,13 @@ export default function SignIn() {
         <Form onSubmit={handleSubmit}>
           <Form.Group className="mb-3" controlId="formBasicNickname">
             <Form.Label>nickname</Form.Label>
-            <Form.Control type="email" placeholder="Enter nickname" />
+            <Form.Control type="text" placeholder="Enter nickname" onChange={e => setNickname(e.target.value)} value={nickname} />
             <Form.Text className="text-muted">
               We'll never share your email with anyone else.
             </Form.Text>
           </Form.Group>
 
-          <Button href="/feed" id="submitBtn" className="mt-4" variant="primary" type="submit">
+          <Button onClick={handleSubmit} id="submitBtn" className="mt-4" variant="primary" type="submit">
             Submit
           </Button>
         </Form>

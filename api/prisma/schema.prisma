@@ -175,7 +175,7 @@ model artist {
   nickname         String             @id @db.VarChar(16)
   firstname        String             @db.VarChar(20)
   lastname         String             @db.VarChar(20)
-  e_mail           String?            @unique @db.VarChar(100)
+  e_mail           String            @unique @db.VarChar(100)
   locality         String             @db.VarChar(16)
   bestinstrument   String             @db.VarChar(16)
   telephonenumber  String             @unique @db.VarChar(16)
