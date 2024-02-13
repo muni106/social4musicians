@@ -4,8 +4,8 @@ import cookieParser from "cookie-parser";
 import cors from "cors";
 import { router } from "./routes";
 import { userCreation } from "./queries/dbCreate";
-import type { artist } from "@prisma/client";
-import { getAllArtists, getAllNicknames, getMusicianAccount, getMusicianByEmail } from "./queries/dbRead";
+import type { artist, discussion, genre } from "@prisma/client";
+import { getAllArtists, getAllDiscussions, getAllGenres, getAllNicknames, getDiscussionByGenre, getDiscussionForFeed, getMusicianAccount, getMusicianByEmail } from "./queries/dbRead";
 import { stringify } from "querystring";
 
 const prisma = new PrismaClient();
@@ -53,6 +53,33 @@ app.get('/nicknames', (req:Request, res:Response) => {
     .then(() => {
       return res.json(val);
     })
+})
+
+app.get('/genres', (req:Request, res:Response) => {
+  let genres:Promise<genre[]> = getAllGenres(prisma);
+  let genreGod:genre[] = [];
+  genres.then( x => {
+    x.forEach(genre => {
+      genreGod.push(genre);
+    })
+  })
+  .then(() => {
+    return res.json(genreGod);
+  })
+})
+
+app.get('/postsFeed', (req:Request, res:Response) => {
+  console.log("try");
+  const dd:Promise<discussion[]> = getAllDiscussions(prisma); 
+  const discussionsProm:Promise<discussion[]> = getDiscussionForFeed(prisma, req.params.nickname) 
+  let discussions:discussion[] = [];
+  dd.then( x => x.forEach(disc => {
+    discussions.push(disc);
+  }))
+  .then(() => {
+    console.log(discussions);
+    return res.json(discussions);
+  })
 })
 
 app.use("/api", router);

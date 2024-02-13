@@ -1,4 +1,4 @@
-import { Prisma, PrismaClient, artist } from "@prisma/client";
+import { Prisma, PrismaClient, artist, discussion } from "@prisma/client";
 
 // USER GETTERS
 export async function getAllArtists(
@@ -12,6 +12,13 @@ export async function getAllArtists(
   return allArtists;
 }
 
+export async function getAllMusicians(
+  prisma: PrismaClient,
+) {
+  const allArtists = await prisma.artist.findMany({
+  });
+  return allArtists;
+}
 export async function getAllNicknames(
   prisma: PrismaClient,
 ) {
@@ -22,6 +29,20 @@ export async function getAllNicknames(
   });
   return allArtists.map(x => x.nickname);
 }
+
+export async function getAllFollowing(
+  prisma: PrismaClient,
+  nickname:string
+) {
+  const gen = await prisma.follow.findMany({
+    where: {
+      nickname: nickname
+    }
+  });
+  
+  return gen.map(x => x.genrename);
+}
+
 
 export async function getAllGenres(prisma: PrismaClient) {
   const genres = await prisma.genre.findMany({});
@@ -51,6 +72,15 @@ export async function getMusicianByEmail(
     },
   });
   return musician;
+}
+
+export async function getMusiciansByGenre(prisma: PrismaClient, genre:string){
+  const artists = await prisma.influence.findMany({
+    where: {
+      genrename: genre
+    }
+  }) 
+  return artists.map(x => x.nickname);
 }
 
 export async function getMusicianProfile(
@@ -103,6 +133,34 @@ export async function getChatParticipants(prisma: PrismaClient) {
 export async function getAllDiscussions(prisma: PrismaClient) {
   const allDisc = await prisma.discussion.findMany({});
   return allDisc;
+}
+
+export async function getDiscussionByNickname(prisma:PrismaClient, nickname:string) {
+  const discussions = await prisma.discussion.findMany({
+    where : {
+      nickname: nickname
+    }
+  })
+
+  return discussions;
+} 
+
+export async function getDiscussionByGenre(prisma:PrismaClient, genre:string) {
+  const discussions:discussion[] = [];
+  const nicknames: Promise<string[]> = getMusiciansByGenre(prisma, genre);
+  nicknames.then(x => x.forEach(nickname => {
+    getDiscussionByNickname(prisma, nickname).then(x => x.forEach(el => discussions.push(el)));
+  }))
+  return discussions;
+}
+
+export async function getDiscussionForFeed(prisma:PrismaClient, nickname:string) {
+  let discussions:discussion[] = [];
+  const genres = getAllFollowing(prisma, nickname);
+  genres.then(x => x.forEach(el => {
+    getDiscussionByGenre(prisma, el).then(x => x.forEach( disc => discussions.push(disc)))
+  }));
+  return discussions;
 }
 
 export async function getAllHashtags(prisma: PrismaClient) {

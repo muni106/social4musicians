@@ -4,15 +4,22 @@ import '../assets/css/landing.css';
 import Header from '../components/header';
 import UserProfile from '../helpers/userProfile';
 import AllPosts from '../components/feedPosts';
+import SideLeft from '../components/sideLeft';
+import SideRight from '../components/sideRight';
 
 function Feed() {
-  let userName = UserProfile.getName();
+  let user = UserProfile.getName();
   return (
     <div className="feedBody">
+        <h1>{user}</h1>
         <Header/>
         <div className='content'>
-           <h1>{userName}</h1> 
+          <SideLeft/>
+          <main>
            <AllPosts/>
+          </main>
+          <SideRight/>
+
         </div>
     </div>
   );

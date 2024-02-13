@@ -1,16 +1,14 @@
 var UserProfile = (function() {
-    var full_name = "";
     var getName = function () {
-        return full_name;
-    }
-
-    var setName = function(nome:string) {
-        full_name = nome;
+        const cookieValue = document.cookie
+        .split("; ")
+        .find((row) => row.startsWith("nickname="))
+        ?.split("=")[1];
+        return cookieValue;
     }
 
     return {
         getName: getName,
-        setName: setName
     }
 }) ();
 

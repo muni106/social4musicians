@@ -31,3 +31,12 @@ main {
     border-color: black;
     color:lightgray;
 }
+.content {
+    display:flex;
+    justify-content:center ;
+}
+main {
+    width:fit-content;
+    margin-left: 4vw;
+    margin-right: 4vw;
+}

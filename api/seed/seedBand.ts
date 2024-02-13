@@ -11,6 +11,7 @@ import {
   getAllArtists,
   getAllBands,
   getAllGenres,
+  getAllMusicians,
   getAllSongs,
   getArtistSongs,
   getBandSongs,
@@ -58,7 +59,7 @@ export async function seedSongs(prisma: PrismaClient) {
       await createSongByBand(
         prisma,
         3,
-        "default song",
+        "defaultSh",
         130,
         bands[i].bandname,
         new Date()
@@ -68,7 +69,7 @@ export async function seedSongs(prisma: PrismaClient) {
       await createSongByBand(
         prisma,
         3,
-        "default song 2",
+        "song2",
         130,
         bands[i].bandname,
         new Date()
@@ -79,7 +80,7 @@ export async function seedSongs(prisma: PrismaClient) {
       await createSongByArtist(
         prisma,
         2,
-        "default solo song",
+        "soloSong",
         60,
         users[i].nickname,
         new Date()
@@ -89,7 +90,7 @@ export async function seedSongs(prisma: PrismaClient) {
       await createSongByArtist(
         prisma,
         2,
-        "default solo song 2",
+        "soloSong2",
         60,
         users[i].nickname,
         new Date()
@@ -103,12 +104,13 @@ export async function seedSongs(prisma: PrismaClient) {
 export async function seedAlbums(prisma: PrismaClient) {
   try {
     const allSongs = await getAllSongs(prisma);
-    const allArtists = await getAllArtists(prisma);
+    const allArtists = await getAllMusicians(prisma);
     const allBands = await getAllBands(prisma);
     for (let i = 0; i < allArtists.length; i++) {
+      console.log(allArtists[i]);
       let currAlbum = await createAlbumByArtist(
         prisma,
-        "default album",
+        "default a",
         new Date(),
         allArtists[i].nickname
       );
@@ -119,7 +121,7 @@ export async function seedAlbums(prisma: PrismaClient) {
     for (let i = 0; i < allBands.length; i++) {
       let currAlbum = await createAlbumByBand(
         prisma,
-        "default solo album",
+        "soloAlbum",
         new Date(),
         allBands[i].bandname
       );

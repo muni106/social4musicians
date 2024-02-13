@@ -3,3 +3,23 @@
     width: 50vw;
     height: 15vw;
 }
+
+.musicianPost {
+    color: greenyellow;
+}
+
+.bottone {
+    border-style: none;
+    background-color: green;
+    border-radius: 20px;
+    margin-right: 1vw;
+}
+
+.buttons {
+    display: flex;
+    align-items: center;
+}
+
+#bodyGenre {
+    background-color: #2C2F33;
+}

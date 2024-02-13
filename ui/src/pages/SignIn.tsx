@@ -9,7 +9,6 @@ import { redirect, useNavigate } from 'react-router-dom';
 import { httpHelper } from '../helpers/httpHelper';
 import axios from 'axios';
 
-let ok;
 export default function SignIn() {
   const navigate = useNavigate();
   const [nickname, setNickname] = useState('');
@@ -20,7 +19,7 @@ export default function SignIn() {
       .then((response) => {
         console.log(response.data.includes('munssi'));
         if (response.data.includes(nickname)) {
-          UserProfile.setName(nickname);
+          document.cookie = `nickname=${nickname}; SameSite=None; Secure`;
           navigate('/feed');
         }
         else console.log('user not found')

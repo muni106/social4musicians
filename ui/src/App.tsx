@@ -5,6 +5,7 @@ import SignIn from './pages/SignIn';
 import SignUp from './pages/SignUp';
 import Feed from './pages/feed';
 import Band from './pages/band';
+import Genres from './pages/Genres';
 
 let nickname: string = "";
 function App() {
@@ -16,6 +17,7 @@ function App() {
           <Route path='/signup' Component={SignUp} />
           <Route path='/feed' Component={Feed} />
           <Route path='/band' Component={Band} />
+          <Route path='/genres' Component={Genres} />
         </Routes>
     </BrowserRouter>
   );
